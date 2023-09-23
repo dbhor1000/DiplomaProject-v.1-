@@ -5,6 +5,7 @@ import org.springdoc.api.ErrorMessage;
 
 import javax.validation.constraints.Size;
 
+
 @Data
 public class NewPassword {
 
