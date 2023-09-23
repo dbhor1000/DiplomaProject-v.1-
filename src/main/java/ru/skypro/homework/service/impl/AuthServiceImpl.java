@@ -8,11 +8,15 @@ import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 
+import java.util.ArrayList;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
     private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
+
+    static ArrayList<String> userLog = new ArrayList<>();
 
     public AuthServiceImpl(UserDetailsManager manager,
                            PasswordEncoder passwordEncoder) {
@@ -24,9 +28,11 @@ public class AuthServiceImpl implements AuthService {
     public boolean login(String userName, String password) {
         if (!manager.userExists(userName)) {
             return false;
+        } else {
+            UserDetails userDetails = manager.loadUserByUsername(userName);
+            userLog.add(userName);
+            return encoder.matches(password, userDetails.getPassword());
         }
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
     }
 
     @Override
