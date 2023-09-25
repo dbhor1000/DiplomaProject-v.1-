@@ -2,15 +2,20 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
+import java.util.ArrayList;
+
 
 @Data
 public class Comments {
 
-    private Integer author;
-    private String authorImage;
-    private String authorFirstName;
-    private Integer createdAt;
-    private Integer pk;
-    private String text;
+    private Integer count;
+
+    private ArrayList<Comments> results;
+
+    {
+        count = results.size() - 1;
+    }
+
+    //Аналогично с Ads
 
 }
