@@ -17,136 +17,56 @@ import ru.skypro.homework.service.AuthService;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/ads")
 public class AdController {
 
     //private final AdService adService;
 
     //
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "запрос выполнен, вывод информации об объявлениях;"
-            )
-    }
-    )
-    @GetMapping("/ads")
+    @GetMapping
     public ResponseEntity<Ads> adInfo() {
             return ResponseEntity.ok().build();
     }
 
     //
 
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "201", description = "запрос выполнен, вывод информации об объявлениях;"
-            ),
-            @ApiResponse(
-                    responseCode = "401", description = "пользователь не авторизирован"
-            )
-    }
-    )
-    @PostMapping("/ads")
-    public ResponseEntity<?> newAd(@RequestBody Ad ad) {
+    @PostMapping
+    public ResponseEntity<?> newAd(@RequestParam Ad ad, @RequestParam String picture) {
         return ResponseEntity.ok().build();
     }
 
     //
 
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "запрос выполнен, вывод информации об объявлениях;"
-            ),
-            @ApiResponse(
-                    responseCode = "401", description = "отсутствует авторизация;"
-            ),
-            @ApiResponse(
-                    responseCode = "404", description = "объявление не найдено;"
-            )
-    }
-    )
-    @GetMapping("/ads/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ExtendedAd> adInfoById(@PathVariable Integer id) {
         return ResponseEntity.ok().build();
     }
 
     //
 
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "204", description = "запрос выполнен, нет возвращаемогосодержимого;"
-            ),
-            @ApiResponse(
-                    responseCode = "401", description = "отсутствует авторизация;"
-            ),
-            @ApiResponse(
-                    responseCode = "403", description = "операция запрещена;"
-            ),
-            @ApiResponse(
-                    responseCode = "404", description = "объявление не найдено;"
-            )
-    }
-    )
-    @DeleteMapping("/ads/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAdById(@PathVariable Integer id) {
         return ResponseEntity.ok().build();
     }
 
     //
 
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "запрос выполнен;"
-            ),
-            @ApiResponse(
-                    responseCode = "401", description = "отсутствует авторизация;"
-            ),
-            @ApiResponse(
-                    responseCode = "403", description = "операция запрещена;"
-            ),
-            @ApiResponse(
-                    responseCode = "404", description = "объявление не найдено;"
-            )
-    }
-    )
-    @PatchMapping("/ads/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<?> patchAdById(@PathVariable Integer id, @RequestBody CreateOrUpdateAd createOrUpdateAd) {
         return ResponseEntity.ok().build();
     }
 
     //
 
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "запрос выполнен;"
-            ),
-            @ApiResponse(
-                    responseCode = "401", description = "отсутствует авторизация;"
-            )
-    }
-    )
-    @GetMapping("/ads/me")
+    @GetMapping("/me")
     public ResponseEntity<?> showAuthorizedUserAd() {
         return ResponseEntity.ok().build();
     }
 
     //
 
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "запрос выполнен;"
-            ),
-            @ApiResponse(
-                    responseCode = "401", description = "отсутствует авторизация;"
-            ),
-            @ApiResponse(
-                    responseCode = "403", description = "операция запрещена;"
-            ),
-            @ApiResponse(
-                    responseCode = "404", description = "объявление не найдено;"
-            )
-    }
-    )
-    @PatchMapping("/ads/{id}/image")
-    public ResponseEntity<?> patchAdPictureById(@PathVariable Integer id, @RequestBody String linkedPicture) {
+    @PatchMapping("/{id}/image")
+    public ResponseEntity<?> patchAdPictureById(@PathVariable Integer id, @RequestParam String linkedPicture) {
         return ResponseEntity.ok().build();
     }
 

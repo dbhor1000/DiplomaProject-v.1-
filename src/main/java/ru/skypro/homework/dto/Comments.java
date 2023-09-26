@@ -3,6 +3,7 @@ package ru.skypro.homework.dto;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
@@ -10,12 +11,6 @@ public class Comments {
 
     private Integer count;
 
-    private ArrayList<Comments> results;
-
-    {
-        count = results.size() - 1;
-    }
-
-    //Аналогично с Ads
+    private List<Comments> results;
 
 }

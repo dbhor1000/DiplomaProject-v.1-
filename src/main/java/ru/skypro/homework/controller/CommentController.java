@@ -14,90 +14,34 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/ads")
 public class CommentController {
 
     //private final CommentService commentService
 
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "запрос выполнен;"
-            ),
-            @ApiResponse(
-                    responseCode = "401", description = "отсутствует авторизация;"
-            ),
-            @ApiResponse(
-                    responseCode = "404", description = "объявление не найдено;"
-            )
-    }
-    )
-    @GetMapping("/ads/{id}/comments")
+    @GetMapping("/{id}/comments")
     public ResponseEntity<Comments> getAdComments(@PathVariable Integer id) {
         return ResponseEntity.ok().build();
     }
 
     //
 
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "запрос выполнен;"
-            ),
-            @ApiResponse(
-                    responseCode = "401", description = "отсутствует авторизация;"
-            ),
-            @ApiResponse(
-                    responseCode = "403", description = "операция запрещена;"
-            ),
-            @ApiResponse(
-                    responseCode = "404", description = "объявление не найдено;"
-            )
-    }
-    )
-    @PostMapping("/ads/{id}/comments")
+    @PostMapping("/{id}/comments")
     public ResponseEntity<?> deleteAdById(@PathVariable Integer id, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
         return ResponseEntity.ok().build();
     }
 
     //
 
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "запрос выполнен;"
-            ),
-            @ApiResponse(
-                    responseCode = "401", description = "отсутствует авторизация;"
-            ),
-            @ApiResponse(
-                    responseCode = "403", description = "операция запрещена;"
-            ),
-            @ApiResponse(
-                    responseCode = "404", description = "объявление не найдено;"
-            )
-    }
-    )
-    @DeleteMapping("/ads/{adId}/comments/{commentId}")
-    public ResponseEntity<?> deleteCommentById(@RequestBody Integer adId, Integer commentId) {
+    @DeleteMapping("/{adId}/comments/{commentId}")
+    public ResponseEntity<?> deleteCommentById(@PathVariable Integer adId, Integer commentId) {
         return ResponseEntity.ok().build();
     }
 
     //
 
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "запрос выполнен;"
-            ),
-            @ApiResponse(
-                    responseCode = "401", description = "отсутствует авторизация;"
-            ),
-            @ApiResponse(
-                    responseCode = "403", description = "операция запрещена;"
-            ),
-            @ApiResponse(
-                    responseCode = "404", description = "объявление не найдено;"
-            )
-    }
-    )
-    @PatchMapping("/ads/{adId}/comments/{commentId}")
-    public ResponseEntity<?> patchCommentById(@RequestBody Integer adId, Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
+    @PatchMapping("/{adId}/comments/{commentId}")
+    public ResponseEntity<?> patchCommentById(@PathVariable Integer adId, Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
         return ResponseEntity.ok().build();
     }
 

@@ -21,6 +21,7 @@ import java.security.Principal;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/users")
 public class UserController {
 
     //private final UserService usersService;
@@ -53,68 +54,29 @@ public class UserController {
 
     //
 
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "запрос выполнен;"
-            ),
-            @ApiResponse(
-                    responseCode = "401", description = "отсутствует авторизация;"
-            ),
-            @ApiResponse(
-                    responseCode = "403", description = "операция запрещена;"
-            )
-    }
-    )
-    @PostMapping("/users/set_password")
+    @PostMapping("/set_password")
     public ResponseEntity<?> changePassword(@RequestBody NewPassword newPassword) {
         return ResponseEntity.ok().build();
     }
 
     //
 
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "запрос выполнен;"
-            ),
-            @ApiResponse(
-                    responseCode = "401", description = "отсутствует авторизация;"
-            )
-    }
-    )
-    @GetMapping("/users/me")
+    @GetMapping("/me")
     public ResponseEntity<?> getAuthorizedUserInfo() {
         return ResponseEntity.ok().build();
     }
 
     //
 
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "запрос выполнен;"
-            ),
-            @ApiResponse(
-                    responseCode = "401", description = "отсутствует авторизация;"
-            )
-    }
-    )
-    @PatchMapping("/users/me")
+    @PatchMapping("/me")
     public ResponseEntity<?> patchAuthorizedUser(@RequestBody UpdateUser updateUser) {
         return ResponseEntity.ok().build();
     }
 
     //
 
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200", description = "запрос выполнен;"
-            ),
-            @ApiResponse(
-                    responseCode = "401", description = "отсутствует авторизация;"
-            )
-    }
-    )
-    @PatchMapping("/users/me/image")
-    public ResponseEntity<?> editAuthorizedUserProfilePic(@RequestBody String linkedPicture) {
+    @PatchMapping("/me/image")
+    public ResponseEntity<?> editAuthorizedUserProfilePic(@RequestParam String linkedPicture) {
         return ResponseEntity.ok().build();
     }
 }

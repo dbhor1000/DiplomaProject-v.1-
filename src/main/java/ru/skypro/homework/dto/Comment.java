@@ -11,7 +11,6 @@ public class Comment {
     private String authorImage;
     private String authorFirstName;
     private Long createdAt;
-    //Исправил исходя из комментария на GitHub. Однако, в Schemas был Integer.
     private Integer pk;
     private String text;
 
