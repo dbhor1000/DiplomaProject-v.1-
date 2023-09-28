@@ -6,8 +6,10 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.AuthService;
@@ -30,8 +32,8 @@ public class AdController {
 
     //
 
-    @PostMapping
-    public ResponseEntity<?> newAd(@RequestParam Ad ad, @RequestParam String picture) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> newAd(@RequestParam("properties") Ad ad, @RequestParam("image") MultipartFile picture) {
         return ResponseEntity.ok().build();
     }
 
@@ -65,8 +67,8 @@ public class AdController {
 
     //
 
-    @PatchMapping("/{id}/image")
-    public ResponseEntity<?> patchAdPictureById(@PathVariable Integer id, @RequestParam String linkedPicture) {
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> patchAdPictureById(@PathVariable Integer id, @RequestParam("image") MultipartFile linkedPicture) {
         return ResponseEntity.ok().build();
     }
 
