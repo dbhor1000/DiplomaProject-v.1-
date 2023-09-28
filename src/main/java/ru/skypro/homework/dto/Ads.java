@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class Ads {
 
-    private static Integer count;
+    private Integer count;
     private List<Ad> results;
 
 }
