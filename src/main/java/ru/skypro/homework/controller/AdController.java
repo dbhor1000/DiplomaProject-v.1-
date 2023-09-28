@@ -23,7 +23,6 @@ import ru.skypro.homework.service.AuthService;
 public class AdController {
 
     //private final AdService adService;
-
     //
     @GetMapping
     public ResponseEntity<Ads> adInfo() {

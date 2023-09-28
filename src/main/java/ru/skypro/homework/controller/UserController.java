@@ -28,6 +28,7 @@ public class UserController {
 
     //private final UserService usersService;
 
+
     //@PostMapping("/users/set_password")
     //public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword, Principal principal) {
     //    if (usersService.setPassword(newPassword.getCurrentPassword(), newPassword.getNewPassword())) {
