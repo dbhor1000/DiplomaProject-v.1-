@@ -27,7 +27,7 @@ public class CommentController {
     //
 
     @PostMapping("/{id}/comments")
-    public ResponseEntity<?> deleteAdById(@PathVariable Integer id, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
+    public ResponseEntity<?> addCommentToAd(@PathVariable Integer id, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
         return ResponseEntity.ok().build();
     }
 

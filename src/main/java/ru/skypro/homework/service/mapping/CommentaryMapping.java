@@ -1,4 +1,4 @@
 package ru.skypro.homework.service.mapping;
 
-public class CommentaryMapping {
+public interface CommentaryMapping {
 }

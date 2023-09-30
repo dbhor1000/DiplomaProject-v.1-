@@ -16,11 +16,7 @@ public class Commentary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private Integer author;
-    private String authorImage;
-    private String authorFirstName;
     private Long createdAt;
-    private Integer pk;
     private String text;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "USER_ID", nullable = false)
