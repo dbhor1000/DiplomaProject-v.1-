@@ -8,12 +8,12 @@ import ru.skypro.homework.dto.ExtendedAd;
 @Mapper
 public interface AdMapping {
 
-    public Ad AdEntityToAdDto(ru.skypro.homework.model.Ad ad);
+    public Ad adEntityToAdDto(ru.skypro.homework.model.Ad ad);
 
-    public ExtendedAd AdEntityToExtendedAdDto(ru.skypro.homework.model.Ad ad);
+    public ExtendedAd adEntityToExtendedAdDto(ru.skypro.homework.model.Ad ad);
 
-    public ru.skypro.homework.model.Ad AdDtoToAdEntity(Ad ad);
+    public ru.skypro.homework.model.Ad adDtoToAdEntity(Ad ad);
 
-    public ru.skypro.homework.model.Ad CreateOrUpdateAdDtoToAdEntity (CreateOrUpdateAd createOrUpdateAd);
+    public ru.skypro.homework.model.Ad createOrUpdateAdDtoToAdEntity (CreateOrUpdateAd createOrUpdateAd);
 
 }
