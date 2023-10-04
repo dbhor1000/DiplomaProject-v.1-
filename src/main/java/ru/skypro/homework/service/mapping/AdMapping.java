@@ -7,7 +7,7 @@ import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 
-//@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AdMapping {
 
     public Ad adEntityToAdDto(ru.skypro.homework.model.Ad ad);
