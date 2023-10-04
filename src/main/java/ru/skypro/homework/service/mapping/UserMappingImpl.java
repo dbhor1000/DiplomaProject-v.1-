@@ -5,7 +5,7 @@ import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.model.UserEntity;
 
 @Component
 public class UserMappingImpl implements UserMapping {
@@ -16,18 +16,18 @@ public class UserMappingImpl implements UserMapping {
     //UpdateUser(DTO) -> User(Entity)
 
     @Override
-    public User newPasswordDtoToUser (NewPassword newPassword) {
+    public UserEntity newPasswordDtoToUser (NewPassword newPassword) {
         if (newPassword == null) {
             return null;
         }
 
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setPassword(newPassword.getNewPassword());
         return user;
     }
 
     @Override
-    public ru.skypro.homework.dto.User userEntityToUserDto (User userEntityInput) {
+    public ru.skypro.homework.dto.User userEntityToUserDto (UserEntity userEntityInput) {
         if (userEntityInput == null) {
             return null;
         }
@@ -44,12 +44,12 @@ public class UserMappingImpl implements UserMapping {
     }
 
     @Override
-    public User updateUserDtoToUserEntity (UpdateUser updateUser) {
+    public UserEntity updateUserDtoToUserEntity (UpdateUser updateUser) {
         if (updateUser == null) {
             return null;
         }
 
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setFirstName(updateUser.getFirstName());
         user.setLastName(updateUser.getLastName());
         user.setPhone(user.getPhone());

@@ -24,9 +24,9 @@ public class CommentaryMappingImpl implements CommentaryMapping {
             return null;
         }
         Comment comment = new Comment();
-        comment.setAuthor(commentary.getUser().getId());
-        comment.setAuthorImage(commentary.getUser().getImage());
-        comment.setAuthorFirstName(commentary.getUser().getFirstName());
+        comment.setAuthor(commentary.getUserRelated().getId());
+        comment.setAuthorImage(commentary.getUserRelated().getImage());
+        comment.setAuthorFirstName(commentary.getUserRelated().getFirstName());
         comment.setCreatedAt(commentary.getCreatedAt());
         comment.setPk(Math.toIntExact(commentary.getId()));
         comment.setText(commentary.getText());

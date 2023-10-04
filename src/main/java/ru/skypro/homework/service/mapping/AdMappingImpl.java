@@ -12,7 +12,6 @@ public class AdMappingImpl implements AdMapping {
 
     private final UserRepository userRepository;
 
-
     public AdMappingImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -24,7 +23,7 @@ public class AdMappingImpl implements AdMapping {
             return null;
         }
         Ad assembledAdDto = new Ad();
-        assembledAdDto.setAuthor(ad.getUser().getId());
+        assembledAdDto.setAuthor(ad.getUserRelated().getId());
         assembledAdDto.setPk(Math.toIntExact(ad.getId()));
         assembledAdDto.setImage(ad.getImage());
         assembledAdDto.setPrice(ad.getPrice());
@@ -38,12 +37,12 @@ public class AdMappingImpl implements AdMapping {
         }
         ExtendedAd assembledExtendedAdDto = new ExtendedAd();
         assembledExtendedAdDto.setPk(Math.toIntExact(ad.getId()));
-        assembledExtendedAdDto.setAuthorFirstName(ad.getUser().getFirstName());
-        assembledExtendedAdDto.setAuthorLastName(ad.getUser().getLastName());
+        assembledExtendedAdDto.setAuthorFirstName(ad.getUserRelated().getFirstName());
+        assembledExtendedAdDto.setAuthorLastName(ad.getUserRelated().getLastName());
         assembledExtendedAdDto.setDescription(ad.getDescription());
-        assembledExtendedAdDto.setEmail(ad.getUser().getEmail());
+        assembledExtendedAdDto.setEmail(ad.getUserRelated().getEmail());
         assembledExtendedAdDto.setImage(ad.getImage());
-        assembledExtendedAdDto.setPhone(ad.getUser().getPhone());
+        assembledExtendedAdDto.setPhone(ad.getUserRelated().getPhone());
         assembledExtendedAdDto.setPrice(ad.getPrice());
         assembledExtendedAdDto.setTitle(ad.getTitle());
         return assembledExtendedAdDto;
@@ -57,7 +56,7 @@ public class AdMappingImpl implements AdMapping {
         }
 
         ru.skypro.homework.model.Ad modifiedAdEntity = new ru.skypro.homework.model.Ad();
-        modifiedAdEntity.setUser(userRepository.getReferenceById(Long.valueOf(ad.getAuthor())));
+        modifiedAdEntity.setUserRelated(userRepository.getReferenceById(Long.valueOf(ad.getAuthor())));
         modifiedAdEntity.setId(Long.valueOf(ad.getPk())); //Сеттер для поля Long принимает Integer? ? ?
         modifiedAdEntity.setImage(ad.getImage());
         modifiedAdEntity.setPrice(ad.getPrice());

@@ -20,10 +20,10 @@ public class Commentary {
     private String text;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "USER_ID", nullable = false)
-    private User user;
+    private UserEntity userRelated;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "AD_ID", nullable = false)
-    private Ad ad;
+    private Ad adRelated;
 
     public long getId() {
         return id;
@@ -49,19 +49,19 @@ public class Commentary {
         this.text = text;
     }
 
-    public User getUser() {
-        return user;
+    public UserEntity getUserRelated() {
+        return userRelated;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserRelated(UserEntity userRelated) {
+        this.userRelated = userRelated;
     }
 
-    public Ad getAd() {
-        return ad;
+    public Ad getAdRelated() {
+        return adRelated;
     }
 
-    public void setAd(Ad ad) {
-        this.ad = ad;
+    public void setAdRelated(Ad adRelated) {
+        this.adRelated = adRelated;
     }
 }

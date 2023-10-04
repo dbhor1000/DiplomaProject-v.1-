@@ -24,8 +24,8 @@ public class Ad {
     private String image;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "USER_ID", nullable = false)
-    private User user;
-    @OneToMany(mappedBy = "ad",
+    private UserEntity userRelated;
+    @OneToMany(mappedBy = "adRelated",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     List<Commentary> comments = new ArrayList<>();
@@ -62,12 +62,12 @@ public class Ad {
         this.title = title;
     }
 
-    public User getUser() {
-        return user;
+    public UserEntity getUserRelated() {
+        return userRelated;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserRelated(UserEntity userRelated) {
+        this.userRelated = userRelated;
     }
 
     public List<Commentary> getComments() {
