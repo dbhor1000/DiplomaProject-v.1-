@@ -7,7 +7,7 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.model.UserEntity;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
+//@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapping {
 
     public UserEntity newPasswordDtoToUser (NewPassword newPassword);

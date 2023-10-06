@@ -11,7 +11,7 @@ import ru.skypro.homework.model.Commentary;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
+//@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CommentaryMapping {
 
     public Comment commentEntityToCommentDto(Commentary commentary);

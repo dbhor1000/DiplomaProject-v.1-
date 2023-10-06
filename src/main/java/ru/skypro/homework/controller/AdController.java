@@ -13,26 +13,45 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.mapping.AdMapping;
 
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/ads")
 public class AdController {
 
-    //private final AdService adService;
-    //
+    //Функционал на фронтенде:
+    //1. Получение всех объявлений (через репозиторий) - GET - DTO: Ads
+    //2. Добавление объявлений - POST
+    //3. Получение информации об объявлении по id - GET - DTO: ExtendedAd
+    //4. Удаление объявления по id - DELETE
+    //5. Обновление информации по id - PATCH - DTO: CreateOrUpdateAd
+    //6. Получение объявлений авторизованного пользователя - GET - DTO: Ads
+    //7. Обновление картинки объявления - PATCH
+
+    private final AdService adService;
+    private final AdMapping adMapping;
+
+    public AdController(AdService adService, AdMapping adMapping) {
+        this.adService = adService;
+        this.adMapping = adMapping;
+    }
+
     @GetMapping
     public ResponseEntity<Ads> adInfo() {
-            return ResponseEntity.ok().build();
+        Ads ads = adService.allAdsPassToController();
+
+        return ResponseEntity.ok(ads);
     }
 
     //
+    //***
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> newAd(@RequestParam("properties") Ad ad, @RequestParam("image") MultipartFile picture) {
+        adService.newAd(ad);
         return ResponseEntity.ok().build();
     }
 
