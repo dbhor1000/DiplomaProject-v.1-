@@ -59,9 +59,11 @@ public class AdMappingImpl implements AdMapping {
             return null;
         }
 
+        List<Commentary> comments = new ArrayList<>();
         ru.skypro.homework.model.Ad modifiedAdEntity = new ru.skypro.homework.model.Ad();
-        modifiedAdEntity.setUserRelated(userRepository.getReferenceById(Long.valueOf(ad.getAuthor().longValue())));
-        modifiedAdEntity.setId(Long.valueOf(ad.getPk().longValue())); //Сеттер для поля Long принимает Integer? ? ?
+        modifiedAdEntity.setComments(comments);
+        modifiedAdEntity.setUserRelated(userRepository.getReferenceById((ad.getAuthor().longValue())));
+        modifiedAdEntity.setId(ad.getPk().longValue()); //Сеттер для поля Long принимает Integer? ? ?
         modifiedAdEntity.setImage(ad.getImage());
         modifiedAdEntity.setPrice(ad.getPrice());
         modifiedAdEntity.setTitle(ad.getTitle());

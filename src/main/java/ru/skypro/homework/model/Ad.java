@@ -26,7 +26,7 @@ public class Ad {
     @JoinColumn(name = "USER_ID", nullable = false)
     private UserEntity userRelated;
     @OneToMany(mappedBy = "adRelated",
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
     List<Commentary> comments = new ArrayList<>();
 

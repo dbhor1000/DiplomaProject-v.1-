@@ -1,13 +1,18 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.mapping.AdMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -41,7 +46,7 @@ public class AdServiceImpl implements AdService {
         return allAdsInDTO;
     }
 
-    //С методом ниже не до конца ясно. Похож на маппер, но без входных параметров. Пока что в сервисе.
+    //С методом ниже не до конца ясно. Похож на маппер, но без входных параметров. Пока что в сервисе. Работает.
     @Override
     public Ads allAdsPassToController() {
         Ads ads = new Ads();
@@ -62,7 +67,35 @@ public class AdServiceImpl implements AdService {
         return ad;
     }
 
+    @Override
+    public ExtendedAd requestAdFromDatabaseById(Long id){
+        ExtendedAd adFoundAndMapped = adMapping.adEntityToExtendedAdDto(adRepository.getReferenceById(id));
+        return adFoundAndMapped;
+    }
 
+    @Override
+    public boolean deleteAdById(Long id) {
 
+        if (adRepository.findById(id).isPresent()) {
+            adRepository.deleteById(id);
+            return true;
+        } else {
+            throw new AdNotFoundException();
+        }
+    }
+
+    @Override
+    public Ad editAdPatch(CreateOrUpdateAd createOrUpdateAd, Long id) {
+        if (adRepository.findById(id).isPresent()) {
+            Ad adFoundToPatch = adRepository.getReferenceById(id);
+            adFoundToPatch.setTitle(createOrUpdateAd.getTitle());
+            adFoundToPatch.setPrice(createOrUpdateAd.getPrice());
+            adFoundToPatch.setDescription(createOrUpdateAd.getDescription());
+            adRepository.save(adFoundToPatch);
+            return adFoundToPatch;
+        } else {
+            throw new AdNotFoundException();
+        }
+    }
 
 }

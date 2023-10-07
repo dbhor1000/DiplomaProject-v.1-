@@ -55,11 +55,12 @@ public class CommentaryMappingImpl implements CommentaryMapping {
         if (inputCommentsList == null) {
             return null;
         }
-        List<Comment> mappedList = new ArrayList<Comment>(inputCommentsList.size());
-        for (Commentary commentary : inputCommentsList) {
-            mappedList.add(commentEntityToCommentDto(commentary));
-        }
-        return mappedList;
+            List<Comment> mappedList = new ArrayList<Comment>(inputCommentsList.size());
+            for (Commentary commentary : inputCommentsList) {
+                mappedList.add(commentEntityToCommentDto(commentary));
+            }
+            return mappedList;
+
     }
 
     @Override

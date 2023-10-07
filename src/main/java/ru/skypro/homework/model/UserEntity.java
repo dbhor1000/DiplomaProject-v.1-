@@ -28,12 +28,12 @@ public class UserEntity {
     private String password;
 
     @OneToMany(mappedBy = "userRelated",
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
     List<Ad> ads = new ArrayList<>();
 
     @OneToMany(mappedBy = "userRelated",
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
     List<Ad> comments = new ArrayList<>();
 

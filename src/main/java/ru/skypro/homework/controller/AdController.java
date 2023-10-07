@@ -56,27 +56,40 @@ public class AdController {
     }
 
     //
-
+    //Метод работает.
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAd> adInfoById(@PathVariable Integer id) {
-        return ResponseEntity.ok().build();
+
+        ExtendedAd adById = adService.requestAdFromDatabaseById(id.longValue());
+        return ResponseEntity.ok(adById);
     }
 
     //
-
+    //Метод работает.
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAdById(@PathVariable Integer id) {
-        return ResponseEntity.ok().build();
+
+        if (adService.deleteAdById(id.longValue())) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
     //
+    //Метод работает
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> patchAdById(@PathVariable Integer id, @RequestBody CreateOrUpdateAd createOrUpdateAd) {
-        return ResponseEntity.ok().build();
+        ru.skypro.homework.model.Ad ad = adService.editAdPatch(createOrUpdateAd, id.longValue());
+        if (ad == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
     }
 
     //
+    //Пока не настроена авторизация пользователей помимо стандартного.
 
     @GetMapping("/me")
     public ResponseEntity<?> showAuthorizedUserAd() {
@@ -84,6 +97,7 @@ public class AdController {
     }
 
     //
+    //Работа с изображениями на следующих этапах разработки.
 
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> patchAdPictureById(@PathVariable Integer id, @RequestParam("image") MultipartFile linkedPicture) {
