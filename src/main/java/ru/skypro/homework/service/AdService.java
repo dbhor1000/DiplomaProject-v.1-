@@ -4,6 +4,7 @@ import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.model.UserEntity;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public interface AdService {
 
     public boolean deleteAdById(Long id);
     public ru.skypro.homework.model.Ad editAdPatch(CreateOrUpdateAd createOrUpdateAd, Long id);
+    public Ads authorizedUserAds(String username);
 
 
 

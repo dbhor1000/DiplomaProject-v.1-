@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.mapping;
 
+import org.apache.el.stream.Stream;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
@@ -8,8 +9,7 @@ import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Commentary;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class CommentaryMappingImpl implements CommentaryMapping {
@@ -55,11 +55,11 @@ public class CommentaryMappingImpl implements CommentaryMapping {
         if (inputCommentsList == null) {
             return null;
         }
-            List<Comment> mappedList = new ArrayList<Comment>(inputCommentsList.size());
-            for (Commentary commentary : inputCommentsList) {
-                mappedList.add(commentEntityToCommentDto(commentary));
-            }
-            return mappedList;
+        List<Comment> mappedList = new ArrayList<Comment>(inputCommentsList.size());
+        for (Commentary commentary : inputCommentsList) {
+            mappedList.add(commentEntityToCommentDto(commentary));
+        }
+        return mappedList;
 
     }
 

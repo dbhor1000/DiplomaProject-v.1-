@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.CommentService;
 
 
@@ -24,10 +26,14 @@ public class CommentController {
     //4. Обновление комментария по id (+id объявления) - PATCH - DTO: CreateOrUpdateComment
 
     private final CommentService commentService;
+    private final AdRepository adRepository;
 
-    public CommentController(CommentService commentService) {
+    public CommentController(CommentService commentService, AdRepository adRepository) {
         this.commentService = commentService;
+        this.adRepository = adRepository;
     }
+
+    //Метод работает.
 
     @GetMapping("/{id}/comments")
     public ResponseEntity<Comments> getAdComments(@PathVariable Integer id) {
@@ -41,24 +47,42 @@ public class CommentController {
     }
 
     //
+    //Работает. К методу из Service могут быть вопросы.
 
     @PostMapping("/{id}/comments")
     public ResponseEntity<?> addCommentToAd(@PathVariable Integer id, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        return ResponseEntity.ok().build();
+        if (adRepository.getReferenceById(id.longValue()) == null){
+            return ResponseEntity.notFound().build();
+        } else {
+            Comment addedComment = commentService.addCommentToAd(createOrUpdateComment, id.longValue());
+            return ResponseEntity.ok(addedComment);
+        }
     }
 
     //
+    //Работает.
 
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteCommentById(@PathVariable Integer adId, Integer commentId) {
-        return ResponseEntity.ok().build();
+
+        if (commentService.deleteCommentByIdAndAdId(adId, commentId) == true) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+
     }
 
     //
+    //Работает.
+    //(Сэм): "За всю свою жизнь я не уходил так далеко от дома (писал столько кода за один вечер)".
+    //(Фродо): "Идём, Сэм. Помнишь, что Бильбо сказал? Опасное это дело..."
 
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> patchCommentById(@PathVariable Integer adId, Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        return ResponseEntity.ok().build();
+        if (commentService.patchCommentByIdAndAdId(adId, commentId,createOrUpdateComment) == true) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }

@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Ads;
@@ -7,7 +8,10 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.Commentary;
+import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.mapping.AdMapping;
 
@@ -27,10 +31,12 @@ public class AdServiceImpl implements AdService {
     //6. Получение объявлений авторизованного пользователя - GET - DTO: Ads
     //7. Обновление картинки объявления - PATCH
 
+    private final UserRepository userRepository;
     private final AdRepository adRepository;
     private final AdMapping adMapping;
 
-    public AdServiceImpl(AdRepository adRepository, AdMapping adMapping) {
+    public AdServiceImpl(UserRepository userRepository, AdRepository adRepository, AdMapping adMapping) {
+        this.userRepository = userRepository;
         this.adRepository = adRepository;
         this.adMapping = adMapping;
     }
@@ -63,7 +69,9 @@ public class AdServiceImpl implements AdService {
     //Этот метод сервиса позволяет сохранить объявление. ***
     @Override
     public ru.skypro.homework.dto.Ad newAd(ru.skypro.homework.dto.Ad ad) {
-        adRepository.save(adMapping.adDtoToAdEntity(ad));
+        Ad mappedDTO = adMapping.adDtoToAdEntity(ad);
+        //mappedDTO.setUserRelated(userRepository.getReferenceById(ad.getPk().longValue()));
+        adRepository.save(mappedDTO);
         return ad;
     }
 
@@ -96,6 +104,14 @@ public class AdServiceImpl implements AdService {
         } else {
             throw new AdNotFoundException();
         }
+    }
+
+    @Override
+    public Ads authorizedUserAds(String username) {
+
+        UserEntity authorizedUser = userRepository.findByUsername(username);
+        Ads authorizedUserAds = adMapping.userAdsToAdsDTO(authorizedUser);
+        return authorizedUserAds;
     }
 
 }

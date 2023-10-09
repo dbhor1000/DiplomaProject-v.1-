@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
@@ -23,13 +25,13 @@ import ru.skypro.homework.service.mapping.AdMapping;
 public class AdController {
 
     //Функционал на фронтенде:
-    //1. Получение всех объявлений (через репозиторий) - GET - DTO: Ads
-    //2. Добавление объявлений - POST
-    //3. Получение информации об объявлении по id - GET - DTO: ExtendedAd
-    //4. Удаление объявления по id - DELETE
-    //5. Обновление информации по id - PATCH - DTO: CreateOrUpdateAd
+    //1. Получение всех объявлений (через репозиторий) - GET - DTO: Ads - +++
+    //2. Добавление объявлений - POST - ???
+    //3. Получение информации об объявлении по id - GET - DTO: ExtendedAd - +++
+    //4. Удаление объявления по id - DELETE - +++
+    //5. Обновление информации по id - PATCH - DTO: CreateOrUpdateAd - +++
     //6. Получение объявлений авторизованного пользователя - GET - DTO: Ads
-    //7. Обновление картинки объявления - PATCH
+    //7. Обновление картинки объявления - PATCH - Позже
 
     private final AdService adService;
     private final AdMapping adMapping;
@@ -89,11 +91,14 @@ public class AdController {
     }
 
     //
-    //Пока не настроена авторизация пользователей помимо стандартного.
+    //Метод работает.
 
     @GetMapping("/me")
-    public ResponseEntity<?> showAuthorizedUserAd() {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> showAuthorizedUserAd(Authentication authentication) {
+
+        Ads retrievedAds = adService.authorizedUserAds(authentication.getName());
+
+        return ResponseEntity.ok(retrievedAds);
     }
 
     //

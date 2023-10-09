@@ -1,6 +1,7 @@
 package ru.skypro.homework.model;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 import ru.skypro.homework.dto.Comment;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ public class Commentary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Nullable
     private Long createdAt;
     private String text;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

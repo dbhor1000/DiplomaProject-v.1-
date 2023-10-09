@@ -1,14 +1,13 @@
 package ru.skypro.homework.service.mapping;
 
+
 import org.springframework.stereotype.Component;
-import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.UserEntity;
 
 @Component
-public class UserMappingImpl implements UserMapping {
+public class UsersMappingImpl implements UsersMapping {
 
     //Необходимые мапперы:
     //NewPassword(DTO) -> User(Entity)
@@ -56,3 +55,4 @@ public class UserMappingImpl implements UserMapping {
         return user;
     }
 }
+

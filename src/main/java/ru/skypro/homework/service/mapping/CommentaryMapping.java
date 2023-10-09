@@ -8,8 +8,7 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Commentary;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 //@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CommentaryMapping {

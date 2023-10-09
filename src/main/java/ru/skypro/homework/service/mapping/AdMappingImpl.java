@@ -4,10 +4,10 @@ import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Commentary;
+import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class AdMappingImpl implements AdMapping {
@@ -52,7 +52,8 @@ public class AdMappingImpl implements AdMapping {
     }
 
     //***
-
+    //Не ясно, каким образом поле pk из DTO вляет на Entity? При том, что поле userRelated в Entity соответствует Author, а главный ключ в Entity назначается автоматически.
+    //По всей видимости, это поле не нужно при конвертации DTO -> Entity
     @Override
     public ru.skypro.homework.model.Ad adDtoToAdEntity(Ad ad){
         if (ad == null) {
@@ -63,7 +64,7 @@ public class AdMappingImpl implements AdMapping {
         ru.skypro.homework.model.Ad modifiedAdEntity = new ru.skypro.homework.model.Ad();
         modifiedAdEntity.setComments(comments);
         modifiedAdEntity.setUserRelated(userRepository.getReferenceById((ad.getAuthor().longValue())));
-        modifiedAdEntity.setId(ad.getPk().longValue()); //Сеттер для поля Long принимает Integer? ? ?
+        //modifiedAdEntity.setId(ad.getPk().longValue()); //Сеттер для поля Long принимает Integer? ? ?
         modifiedAdEntity.setImage(ad.getImage());
         modifiedAdEntity.setPrice(ad.getPrice());
         modifiedAdEntity.setTitle(ad.getTitle());
@@ -95,5 +96,17 @@ public class AdMappingImpl implements AdMapping {
             mappedList.add(adEntityToAdDto(ad));
         }
         return mappedList;
+    }
+
+    @Override
+    public Ads userAdsToAdsDTO(UserEntity userEntity) {
+        if (userEntity == null) {
+            return null;
+        }
+
+        Ads ads = new Ads();
+        ads.setResults(AdEntityListToAdsDto(userEntity.getAds()));
+        ads.setCount(userEntity.getAds().size());
+        return ads;
     }
 }

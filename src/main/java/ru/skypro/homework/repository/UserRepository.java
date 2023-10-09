@@ -6,5 +6,6 @@ import ru.skypro.homework.model.UserEntity;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     UserEntity getReferenceById(Long id);
+    UserEntity findByUsername(String username);
 
 }

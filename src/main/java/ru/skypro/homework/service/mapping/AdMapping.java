@@ -4,8 +4,10 @@ import org.hibernate.annotations.Parameter;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.model.UserEntity;
 
 import java.util.List;
 
@@ -21,5 +23,6 @@ public interface AdMapping {
     public ru.skypro.homework.model.Ad adDtoToAdEntity(Ad ad);
 
     public ru.skypro.homework.model.Ad createOrUpdateAdDtoToAdEntity (CreateOrUpdateAd createOrUpdateAd);
+    public Ads userAdsToAdsDTO(UserEntity userEntity);
 
 }
