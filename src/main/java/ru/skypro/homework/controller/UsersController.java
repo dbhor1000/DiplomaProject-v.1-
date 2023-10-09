@@ -44,6 +44,7 @@ public class UsersController {
     }
 
     //
+    //Метод работает.
 
     @GetMapping("/me")
     public ResponseEntity<?> getAuthorizedUserInfo(Authentication authentication) {
@@ -54,7 +55,7 @@ public class UsersController {
     }
 
     //
-
+    //Метод работает.
     @PatchMapping("/me")
     public ResponseEntity<?> patchAuthorizedUser(@RequestBody UpdateUser updateUser, Authentication authentication) {
 

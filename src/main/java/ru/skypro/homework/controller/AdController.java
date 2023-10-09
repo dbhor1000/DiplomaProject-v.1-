@@ -30,7 +30,7 @@ public class AdController {
     //3. Получение информации об объявлении по id - GET - DTO: ExtendedAd - +++
     //4. Удаление объявления по id - DELETE - +++
     //5. Обновление информации по id - PATCH - DTO: CreateOrUpdateAd - +++
-    //6. Получение объявлений авторизованного пользователя - GET - DTO: Ads
+    //6. Получение объявлений авторизованного пользователя - GET - DTO: Ads - +++
     //7. Обновление картинки объявления - PATCH - Позже
 
     private final AdService adService;
