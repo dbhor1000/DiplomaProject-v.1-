@@ -1,21 +1,54 @@
 package ru.skypro.homework.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import ru.skypro.homework.dto.Role;
 
+import javax.sql.DataSource;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 
 @Configuration
+//public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 public class WebSecurityConfig {
+
+    //Код для настройки аутентификации для Homework 4
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+    @Bean
+    AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(new BCryptPasswordEncoder());
+        return provider;
+    }
+    
+    //@Override
+    //protected void configure(HttpSecurity http) throws Exception {
+    //    http.authorizeRequests().antMatchers("/login")
+    //            .permitAll()
+    //            .anyRequest()
+    //            .authenticated()
+    //            .and().httpBasic();
+    //}
+
+    //Попытка не увенчалась успехом. В итоге, ошибка "Encoded password does not look like BCrypt".
+    // --- --- ---
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
@@ -37,6 +70,7 @@ public class WebSecurityConfig {
                         .build();
         return new InMemoryUserDetailsManager(user);
     }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
