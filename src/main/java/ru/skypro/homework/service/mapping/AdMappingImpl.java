@@ -1,6 +1,5 @@
 package ru.skypro.homework.service.mapping;
 
-import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Commentary;
@@ -42,7 +41,7 @@ public class AdMappingImpl implements AdMapping {
         assembledExtendedAdDto.setAuthorFirstName(ad.getUserRelated().getFirstName());
         assembledExtendedAdDto.setAuthorLastName(ad.getUserRelated().getLastName());
         assembledExtendedAdDto.setDescription(ad.getDescription());
-        assembledExtendedAdDto.setEmail(ad.getUserRelated().getEmail());
+        assembledExtendedAdDto.setEmail(ad.getUserRelated().getUsername());
         assembledExtendedAdDto.setImage(ad.getImage());
         assembledExtendedAdDto.setPhone(ad.getUserRelated().getPhone());
         assembledExtendedAdDto.setPrice(ad.getPrice());

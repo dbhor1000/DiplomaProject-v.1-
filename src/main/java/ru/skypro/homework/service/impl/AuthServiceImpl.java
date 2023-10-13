@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,9 @@ import java.util.ArrayList;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsManager manager;
+    //private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
-    private final CustomUserDetailsService customUserDetailsService;
+    private final UserDetailsService customUserDetailsService;
     private final UserRepository userRepository;
 
     static ArrayList<String> userLog = new ArrayList<>();
@@ -30,8 +31,14 @@ public class AuthServiceImpl implements AuthService {
     //}
 
 
-    public AuthServiceImpl(UserDetailsManager manager, PasswordEncoder encoder, CustomUserDetailsService customUserDetailsService, UserRepository userRepository) {
-        this.manager = manager;
+    //public AuthServiceImpl(UserDetailsManager manager, PasswordEncoder encoder, CustomUserDetailsService customUserDetailsService, UserRepository userRepository) {
+    //    this.manager = manager;
+    //    this.encoder = encoder;
+    //    this.customUserDetailsService = customUserDetailsService;
+    //    this.userRepository = userRepository;
+    //}
+
+    public AuthServiceImpl(PasswordEncoder encoder, UserDetailsService customUserDetailsService, UserRepository userRepository) {
         this.encoder = encoder;
         this.customUserDetailsService = customUserDetailsService;
         this.userRepository = userRepository;
@@ -51,19 +58,19 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
-    @Override
-    public boolean register(Register register) {
-        if (manager.userExists(register.getUsername())) {
-            return false;
-        }
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
-        return true;
-    }
+    //@Override
+    //public boolean register(Register register) {
+    //    if (manager.userExists(register.getUsername())) {
+    //        return false;
+    //    }
+    //    manager.createUser(
+    //            User.builder()
+    //                    .passwordEncoder(this.encoder::encode)
+    //                    .password(register.getPassword())
+    //                    .username(register.getUsername())
+    //                    .roles(register.getRole().name())
+    //                    .build());
+    //    return true;
+    //}
 
 }

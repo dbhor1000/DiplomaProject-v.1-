@@ -4,8 +4,6 @@ import lombok.Data;
 
 import java.util.*;
 
-
-@Data
 public class Comments {
 
     private Integer count;

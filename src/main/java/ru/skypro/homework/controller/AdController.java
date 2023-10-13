@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.mapping.AdMapping;
@@ -35,14 +36,17 @@ public class AdController {
 
     private final AdService adService;
     private final AdMapping adMapping;
+    private final UserRepository userRepository;
 
-    public AdController(AdService adService, AdMapping adMapping) {
+    public AdController(AdService adService, AdMapping adMapping, UserRepository userRepository) {
         this.adService = adService;
         this.adMapping = adMapping;
+        this.userRepository = userRepository;
     }
 
     @GetMapping
-    public ResponseEntity<Ads> adInfo() {
+    public ResponseEntity<Ads> adInfo(Authentication authentication) {
+
         Ads ads = adService.allAdsPassToController();
 
         return ResponseEntity.ok(ads);
@@ -53,7 +57,7 @@ public class AdController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> newAd(@RequestParam("properties") Ad ad, @RequestParam("image") MultipartFile picture) {
-        adService.newAd(ad);
+        adService.newAd(ad, String.valueOf(picture));
         return ResponseEntity.ok().build();
     }
 

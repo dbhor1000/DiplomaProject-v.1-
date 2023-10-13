@@ -2,6 +2,7 @@ package ru.skypro.homework.service.mapping;
 
 
 import org.springframework.stereotype.Component;
+import ru.skypro.homework.dto.ExtendedLoginViaDB;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.model.UserEntity;
@@ -33,7 +34,7 @@ public class UsersMappingImpl implements UsersMapping {
 
         ru.skypro.homework.dto.User user = new ru.skypro.homework.dto.User();
         user.setId(userEntityInput.getId());
-        user.setEmail(userEntityInput.getEmail());
+        user.setEmail(userEntityInput.getUsername());
         user.setFirstName(userEntityInput.getFirstName());
         user.setLastName(userEntityInput.getLastName());
         user.setPhone(userEntityInput.getPhone());
@@ -53,6 +54,21 @@ public class UsersMappingImpl implements UsersMapping {
         user.setLastName(updateUser.getLastName());
         user.setPhone(user.getPhone());
         return user;
+    }
+
+    @Override
+    public ExtendedLoginViaDB extendedLoginViaDB (UserEntity userEntity){
+        if (userEntity == null) {
+            return null;
+        }
+
+        ExtendedLoginViaDB extendedLoginViaDB = new ExtendedLoginViaDB();
+        extendedLoginViaDB.setPassword(userEntity.getPassword());
+        extendedLoginViaDB.setUsername(userEntity.getUsername());
+        extendedLoginViaDB.setRole(userEntity.getRole());
+        return extendedLoginViaDB;
+
+
     }
 }
 

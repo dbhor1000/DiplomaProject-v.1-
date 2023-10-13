@@ -7,8 +7,6 @@ import ru.skypro.homework.dto.Comment;
 import javax.persistence.*;
 
 @NoArgsConstructor
-@Getter
-@Setter
 @EqualsAndHashCode
 @AllArgsConstructor
 @Entity

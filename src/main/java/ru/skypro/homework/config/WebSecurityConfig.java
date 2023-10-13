@@ -28,15 +28,15 @@ public class WebSecurityConfig {
 
     //Код для настройки аутентификации для Homework 4
 
-    @Autowired
-    private UserDetailsService userDetailsService;
-    @Bean
-    AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(new BCryptPasswordEncoder());
-        return provider;
-    }
+    //@Autowired
+    //private UserDetailsService userDetailsService;
+    //@Bean
+    //AuthenticationProvider authenticationProvider() {
+    //    DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+    //    provider.setUserDetailsService(userDetailsService);
+    //    provider.setPasswordEncoder(new BCryptPasswordEncoder());
+    //    return provider;
+    //}
     
     //@Override
     //protected void configure(HttpSecurity http) throws Exception {
@@ -59,17 +59,17 @@ public class WebSecurityConfig {
             "/register"
     };
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user =
-                User.builder()
-                        .username("user@gmail.com")
-                        .password("password")
-                        .passwordEncoder(passwordEncoder::encode)
-                        .roles(Role.USER.name())
-                        .build();
-        return new InMemoryUserDetailsManager(user);
-    }
+    //@Bean
+    //public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
+    //    UserDetails user =
+    //            User.builder()
+    //                    .username("user@gmail.com")
+    //                    .password("password")
+    //                    .passwordEncoder(passwordEncoder::encode)
+    //                    .roles(Role.USER.name())
+    //                    .build();
+    //    return new InMemoryUserDetailsManager(user);
+    //}
 
 
     @Bean

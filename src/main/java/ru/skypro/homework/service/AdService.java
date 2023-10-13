@@ -23,7 +23,7 @@ public interface AdService {
     public Ads allAdsPassToController();
 
     //***
-    public ru.skypro.homework.dto.Ad newAd(ru.skypro.homework.dto.Ad ad);
+    public ru.skypro.homework.dto.Ad newAd(ru.skypro.homework.dto.Ad ad, String image);
 
     public ExtendedAd requestAdFromDatabaseById(Long id);
 

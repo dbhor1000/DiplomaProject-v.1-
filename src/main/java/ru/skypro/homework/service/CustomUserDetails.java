@@ -4,6 +4,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import ru.skypro.homework.dto.ExtendedLoginViaDB;
+import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.model.UserEntity;
 
 import java.util.Collection;
@@ -12,26 +14,32 @@ import java.util.Collections;
 
 public class CustomUserDetails implements UserDetails {
 
-    private UserEntity userEntity;
+    //private UserEntity userEntity;
+    //
+    //public CustomUserDetails(UserEntity userEntity) {
+    //    //super();
+    //    this.userEntity = userEntity;
+    //}
 
-    public CustomUserDetails(UserEntity userEntity) {
-        super();
-        this.userEntity = userEntity;
+    private final ExtendedLoginViaDB extendedLoginViaDB;
+
+    public CustomUserDetails(ExtendedLoginViaDB extendedLoginViaDB) {
+        this.extendedLoginViaDB = extendedLoginViaDB;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(userEntity.getRole().toString()));
+        return Collections.singleton(new SimpleGrantedAuthority(extendedLoginViaDB.getRole().toString()));
     }
 
     @Override
     public String getPassword() {
-        return userEntity.getPassword();
+        return extendedLoginViaDB.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return userEntity.getUsername();
+        return extendedLoginViaDB.getUsername();
     }
 
     @Override

@@ -65,7 +65,7 @@ public class CommentController {
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteCommentById(@PathVariable Integer adId, Integer commentId) {
 
-        if (commentService.deleteCommentByIdAndAdId(adId, commentId) == true) {
+        if (commentService.deleteCommentByIdAndAdId(adId, commentId)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
@@ -79,7 +79,7 @@ public class CommentController {
 
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> patchCommentById(@PathVariable Integer adId, Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        if (commentService.patchCommentByIdAndAdId(adId, commentId,createOrUpdateComment) == true) {
+        if (commentService.patchCommentByIdAndAdId(adId, commentId,createOrUpdateComment)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();

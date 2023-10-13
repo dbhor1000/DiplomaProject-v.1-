@@ -1,15 +1,18 @@
 package ru.skypro.homework.dto;
 
-import lombok.Data;
+public class ExtendedLoginViaDB {
 
-import javax.validation.constraints.Size;
-
-public class Login {
-
-    @Size(min = 8, max = 16, message = "Проверьте количество символов.")
+    private Role role;
     private String username;
-    @Size(min = 4, max = 32, message = "Проверьте количество символов.")
     private String password;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     public String getUsername() {
         return username;
