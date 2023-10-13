@@ -35,19 +35,13 @@ public class AdServiceImpl implements AdService {
     private final UserRepository userRepository;
     private final AdRepository adRepository;
     private final AdMapping adMapping;
-    private final CommentaryRepository commentaryRepository;
 
-    public AdServiceImpl(UserRepository userRepository, AdRepository adRepository, AdMapping adMapping, CommentaryRepository commentaryRepository) {
+    public AdServiceImpl(UserRepository userRepository, AdRepository adRepository, AdMapping adMapping) {
         this.userRepository = userRepository;
         this.adRepository = adRepository;
         this.adMapping = adMapping;
-        this.commentaryRepository = commentaryRepository;
     }
 
-    //1.---Ниже 2 взаимосвязанных метода---Методы получают все объявления из репозитория, конвертируют список в формат DTO и далее
-    //собирается DTO Ads, готовый к использованию в контроллере.
-
-    //Задействован маппер List<Ad(Entity)> -> List<Ad(DTO)>
     @Override
     public List<ru.skypro.homework.dto.Ad> getAllAdsFromDatabase() {
         List<Ad> allAdsFromDatabaseCollect = adRepository.findAll();
@@ -55,7 +49,6 @@ public class AdServiceImpl implements AdService {
         return allAdsInDTO;
     }
 
-    //С методом ниже не до конца ясно. Похож на маппер, но без входных параметров. Пока что в сервисе. Работает.
     @Override
     public Ads allAdsPassToController() {
 
@@ -64,18 +57,11 @@ public class AdServiceImpl implements AdService {
         ads.setCount(getAllAdsFromDatabase().size());
         return ads;
     }
-    //--- --- ---1.
 
-
-    //2.---Методы для добавления объявлений
-    //06.10 Не удалось настроить. Возможно, дело в маппинге или чём-то другом.
-
-    //Этот метод сервиса позволяет сохранить объявление. ***
     @Override
     public ru.skypro.homework.dto.Ad newAd(ru.skypro.homework.dto.Ad ad, String image) {
         Ad mappedDTO = adMapping.adDtoToAdEntity(ad);
         mappedDTO.setImage(image);
-        //mappedDTO.setUserRelated(userRepository.getReferenceById(ad.getPk().longValue()));
         adRepository.save(mappedDTO);
         return ad;
     }

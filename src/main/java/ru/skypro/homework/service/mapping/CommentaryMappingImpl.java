@@ -14,10 +14,6 @@ import java.util.*;
 @Component
 public class CommentaryMappingImpl implements CommentaryMapping {
 
-    //Судя по шаблону приложения, только 2 метода в разделе "Комментарии" задействуют DTO "CreateOrUpdateComment" (Front -> БД)
-    //Остальные DTO не задействованы на данный момент?
-    //---> Метод GET задействует DTO Comments, которое задействует DTO Comment.
-
     @Override
     public Comment commentEntityToCommentDto(Commentary commentary) {
         if (commentary == null) {
@@ -35,22 +31,6 @@ public class CommentaryMappingImpl implements CommentaryMapping {
 
     }
 
-    //Судя по всему, маппер не требуется. Пока что под комментарием, на всякий случай.
-    //public Commentary CommentDtoToCommentEntity(Comment comment) {
-    //    if (comment == null) {
-    //        return null;
-    //    }
-    //    Commentary commentary  = new Commentary();
-    //    return commentary;
-    //}
-
-    //--- --- ---
-    //DTO Comments включает список List<Comment> results. Этот список можно получить из объявления в БД (сущность включает поле
-    //List<Commentary> comments. Нужно переконвертировать объявления из этого списка Commentary(Entity) -> Comment(DTO)
-    //и далее получить список List<Comment> commentsDTO.
-
-
-    //Метод для конвертации списка объявлений, взятого из БД Ad.
     @Override
     public List<Comment> listFromCommentEntityToDto(List<Commentary> inputCommentsList) {
         if (inputCommentsList == null) {

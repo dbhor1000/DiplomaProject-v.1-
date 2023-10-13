@@ -23,7 +23,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 
 @Configuration
-//public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 public class WebSecurityConfig {
 
     //Код для настройки аутентификации для Homework 4
@@ -47,7 +46,6 @@ public class WebSecurityConfig {
     //            .and().httpBasic();
     //}
 
-    //Попытка не увенчалась успехом. В итоге, ошибка "Encoded password does not look like BCrypt".
     // --- --- ---
 
     private static final String[] AUTH_WHITELIST = {
@@ -93,5 +91,4 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

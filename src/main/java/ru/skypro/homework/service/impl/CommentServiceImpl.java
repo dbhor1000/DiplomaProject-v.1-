@@ -53,25 +53,18 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
-    //Возможно, метод можно упростить и нужно разобраться с временем добавления. Поле Long плохо подходит для хранения времени.
-
     @Override
     public Comment addCommentToAd(CreateOrUpdateComment commentToAdd, Long adId) {
 
         if (adRepository.getReferenceById(adId) != null) {
 
-            Ad adToAddCommentTo = adRepository.getReferenceById(adId); //Полечения объявления (1), к которому нужно добавить комментарий из репозитория
+            Ad adToAddCommentTo = adRepository.getReferenceById(adId);
 
-            //Map<Long, Commentary> commentListToUpdate = adToAddCommentTo.getComments();   //Получение списка комментариев объявления
+            Commentary mappedInputDTO = commentaryMapping.createOrUpdateCommentDtoToCommentaryEntity(commentToAdd);
 
-            Commentary mappedInputDTO = commentaryMapping.createOrUpdateCommentDtoToCommentaryEntity(commentToAdd); //Маппинг входного DTO
+            mappedInputDTO.setUserRelated(adToAddCommentTo.getUserRelated());
 
-            mappedInputDTO.setUserRelated(adToAddCommentTo.getUserRelated()); // Сеттер для поля пользователя, к чьему объявлению добавляем комментарий
-
-            mappedInputDTO.setAdRelated(adToAddCommentTo); // Сеттер для поля объявления, к которому объявлению добавляем комментарий
-
-            //commentListToUpdate.put(Long.valueOf(commentListToUpdate.size()+1), mappedInputDTO); //Лишнее?
-            //adToAddCommentTo.setComments(commentListToUpdate); //Лишнее?
+            mappedInputDTO.setAdRelated(adToAddCommentTo);
 
             commentaryRepository.save(mappedInputDTO);
 
@@ -80,8 +73,6 @@ public class CommentServiceImpl implements CommentService {
             throw new AdNotFoundException();
         }
     }
-
-    //Чтобы этот метод работал, по всей видимости, придётся поменять ArrayList на TreeMap в модели Ad и соответственно в других частях кода. Не хотелось бы :(
 
     @Override
     public boolean deleteCommentByIdAndAdId(Integer adId, Integer commentId) {

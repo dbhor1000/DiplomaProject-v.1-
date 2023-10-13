@@ -50,9 +50,6 @@ public class AdMappingImpl implements AdMapping {
 
     }
 
-    //***
-    //Не ясно, каким образом поле pk из DTO вляет на Entity? При том, что поле userRelated в Entity соответствует Author, а главный ключ в Entity назначается автоматически.
-    //По всей видимости, это поле не нужно при конвертации DTO -> Entity
     @Override
     public ru.skypro.homework.model.Ad adDtoToAdEntity(Ad ad){
         if (ad == null) {

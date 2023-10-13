@@ -47,7 +47,7 @@ public class CommentController {
     }
 
     //
-    //Работает. К методу из Service могут быть вопросы.
+    //Метод работает.
 
     @PostMapping("/{id}/comments")
     public ResponseEntity<?> addCommentToAd(@PathVariable Integer id, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
@@ -60,7 +60,7 @@ public class CommentController {
     }
 
     //
-    //Работает.
+    //Метод работает.
 
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteCommentById(@PathVariable Integer adId, Integer commentId) {
@@ -73,9 +73,7 @@ public class CommentController {
     }
 
     //
-    //Работает.
-    //(Сэм): "За всю свою жизнь я не уходил так далеко от дома (писал столько кода за один вечер)".
-    //(Фродо): "Идём, Сэм. Помнишь, что Бильбо сказал? Опасное это дело..."
+    //Метод аботает.
 
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> patchCommentById(@PathVariable Integer adId, Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
