@@ -81,7 +81,7 @@ public class CommentServiceImpl implements CommentService {
         if (adRepository.getReferenceById(adId.longValue()) != null) {
 
             Ad adFound = adRepository.getReferenceById(adId.longValue());
-            Commentary commentFound = commentaryRepository.findByAdRelatedAndId(adFound, commentId.longValue());
+            Commentary commentFound = commentaryRepository.findByAdRelatedAndId(adFound, commentId);
             commentaryRepository.deleteById(commentFound.getId());
 
             return true;
@@ -100,7 +100,7 @@ public class CommentServiceImpl implements CommentService {
         if (adRepository.getReferenceById(adId.longValue()) != null) {
 
             Ad adFound = adRepository.getReferenceById(adId.longValue());
-            Commentary commentFound = commentaryRepository.findByAdRelatedAndId(adFound, commentId.longValue());
+            Commentary commentFound = commentaryRepository.findByAdRelatedAndId(adFound, commentId);
             commentFound.setText(createOrUpdateComment.getText());
             commentaryRepository.save(commentFound);
 

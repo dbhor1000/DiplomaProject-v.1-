@@ -3,6 +3,8 @@ package ru.skypro.homework.service.impl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
@@ -16,8 +18,16 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.mapping.AdMapping;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -59,26 +69,37 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public ru.skypro.homework.dto.Ad newAd(ru.skypro.homework.dto.Ad ad, String image) {
-        Ad mappedDTO = adMapping.adDtoToAdEntity(ad);
-        mappedDTO.setImage(image);
+    public ru.skypro.homework.dto.Ad newAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image, String username) {
+
+        Ad mappedDTO = adMapping.createOrUpdateAdDtoToAdEntity(createOrUpdateAd);
+        mappedDTO.setUserRelated(userRepository.findByUsername(username));
+
+        try {
+            byte[] imageToBytes = image.getBytes();
+            mappedDTO.setImage(Arrays.toString(imageToBytes));//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         adRepository.save(mappedDTO);
-        return ad;
+        ru.skypro.homework.dto.Ad adDTOForOutput = adMapping.adEntityToAdDto(mappedDTO);
+        return adDTOForOutput;
+
     }
 
     @Override
-    public ExtendedAd requestAdFromDatabaseById(Long id){
+    public ExtendedAd requestAdFromDatabaseById(int id){
         ExtendedAd adFoundAndMapped = adMapping.adEntityToExtendedAdDto(adRepository.getReferenceById(id));
         return adFoundAndMapped;
     }
 
     @Override
-    public boolean deleteAdById(Long id) {
+    public boolean deleteAdById(int id) {
 
-        if (adRepository.findById(id).isPresent()) {
+        if (adRepository.findById(id) != null) {
             adRepository.deleteById(id);
-            //List<Commentary> commentsToDelete = commentaryRepository.findAllByAdRelated(adRepository.findById(id));
-            //commentaryRepository.deleteByAd(adRepository.findById(id));
+
 
             return true;
         } else {
@@ -87,8 +108,8 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Ad editAdPatch(CreateOrUpdateAd createOrUpdateAd, Long id) {
-        if (adRepository.findById(id).isPresent()) {
+    public Ad editAdPatch(CreateOrUpdateAd createOrUpdateAd, int id) {
+        if (adRepository.findById(id) != null) {
             Ad adFoundToPatch = adRepository.getReferenceById(id);
             adFoundToPatch.setTitle(createOrUpdateAd.getTitle());
             adFoundToPatch.setPrice(createOrUpdateAd.getPrice());

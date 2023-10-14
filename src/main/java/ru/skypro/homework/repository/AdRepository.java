@@ -10,6 +10,8 @@ import java.util.List;
 public interface AdRepository extends JpaRepository<Ad, Long> {
 
     List<Ad> findAll();
-    Ad getReferenceById(Long id);
+    Ad getReferenceById(int id);
+    Ad findById(int id);
+    void deleteById(int id);
 
 }

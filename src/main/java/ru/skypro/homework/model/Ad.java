@@ -14,7 +14,7 @@ public class Ad {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id; //Главный ключ сооветствует полю Integer pk в DTO*
+    private int id; //Главный ключ сооветствует полю Integer pk в DTO*
     private String description;
     private Integer price;
     private String title;
@@ -27,11 +27,11 @@ public class Ad {
             cascade = CascadeType.ALL)
     List<Commentary> comments = new ArrayList<>();
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

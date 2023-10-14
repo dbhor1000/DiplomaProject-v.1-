@@ -9,8 +9,9 @@ import java.util.List;
 public interface CommentaryRepository extends JpaRepository<Commentary, Long> {
 
     List<Commentary> findAll();
-    Commentary findByAdRelatedAndId(Ad adRelated, long id);
+    Commentary findByAdRelatedAndId(Ad adRelated, int id);
     List<Commentary> findAllByAdRelated(Ad adRelated);
     void deleteAllInBatch();
+    void deleteById(int id);
 
 }

@@ -1,6 +1,8 @@
 package ru.skypro.homework.model;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.lang.Nullable;
 import ru.skypro.homework.dto.Comment;
 
@@ -14,7 +16,7 @@ public class Commentary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
     @Nullable
     private Long createdAt;
     private String text;
@@ -23,13 +25,14 @@ public class Commentary {
     private UserEntity userRelated;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "AD_ID", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Ad adRelated;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

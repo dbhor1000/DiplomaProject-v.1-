@@ -2,9 +2,7 @@ package ru.skypro.homework.service.mapping;
 
 
 import org.springframework.stereotype.Component;
-import ru.skypro.homework.dto.ExtendedLoginViaDB;
-import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.UserEntity;
 
 @Component
@@ -67,8 +65,22 @@ public class UsersMappingImpl implements UsersMapping {
         extendedLoginViaDB.setUsername(userEntity.getUsername());
         extendedLoginViaDB.setRole(userEntity.getRole());
         return extendedLoginViaDB;
+    }
 
+    @Override
+    public UserEntity registerDTOtoUserEntity (Register register){
+        if (register == null) {
+            return null;
+        }
 
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(register.getUsername());
+        userEntity.setFirstName(register.getFirstName());
+        userEntity.setLastName(register.getLastName());
+        userEntity.setPassword(register.getPassword());
+        userEntity.setPhone(register.getPhone());
+        userEntity.setRole(register.getRole());
+        return userEntity;
     }
 }
 

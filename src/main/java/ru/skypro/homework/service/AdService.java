@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
@@ -23,12 +24,12 @@ public interface AdService {
     public Ads allAdsPassToController();
 
     //***
-    public ru.skypro.homework.dto.Ad newAd(ru.skypro.homework.dto.Ad ad, String image);
+    public ru.skypro.homework.dto.Ad newAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image, String username);
 
-    public ExtendedAd requestAdFromDatabaseById(Long id);
+    public ExtendedAd requestAdFromDatabaseById(int id);
 
-    public boolean deleteAdById(Long id);
-    public ru.skypro.homework.model.Ad editAdPatch(CreateOrUpdateAd createOrUpdateAd, Long id);
+    public boolean deleteAdById(int id);
+    public ru.skypro.homework.model.Ad editAdPatch(CreateOrUpdateAd createOrUpdateAd, int id);
     public Ads authorizedUserAds(String username);
 
 

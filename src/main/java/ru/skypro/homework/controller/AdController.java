@@ -18,6 +18,8 @@ import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.mapping.AdMapping;
 
+import javax.transaction.Transactional;
+
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -56,9 +58,15 @@ public class AdController {
     //***
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> newAd(@RequestParam("properties") Ad ad, @RequestParam("image") MultipartFile picture) {
-        adService.newAd(ad, String.valueOf(picture));
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> newAd(@RequestParam(required = false, name = "properties") CreateOrUpdateAd createOrUpdateAd, @RequestParam("image") MultipartFile picture, Authentication authentication) {
+
+        Ad createdAdd = adService.newAd(createOrUpdateAd, picture, authentication.getName());
+
+        if (createdAdd != null) {
+            return ResponseEntity.ok(createdAdd);
+        }
+
+        return ResponseEntity.unprocessableEntity().build();
     }
 
     //
@@ -66,16 +74,17 @@ public class AdController {
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAd> adInfoById(@PathVariable Integer id) {
 
-        ExtendedAd adById = adService.requestAdFromDatabaseById(id.longValue());
+        ExtendedAd adById = adService.requestAdFromDatabaseById(id);
         return ResponseEntity.ok(adById);
     }
 
     //
     //Метод работает.
+    @Transactional
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAdById(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteAdById(@PathVariable int id) {
 
-        if (adService.deleteAdById(id.longValue())) {
+        if (adService.deleteAdById(id)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
@@ -86,7 +95,7 @@ public class AdController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> patchAdById(@PathVariable Integer id, @RequestBody CreateOrUpdateAd createOrUpdateAd) {
-        ru.skypro.homework.model.Ad ad = adService.editAdPatch(createOrUpdateAd, id.longValue());
+        ru.skypro.homework.model.Ad ad = adService.editAdPatch(createOrUpdateAd, id);
         if (ad == null) {
             return ResponseEntity.notFound().build();
         } else {

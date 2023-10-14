@@ -25,7 +25,7 @@ public class AdMappingImpl implements AdMapping {
         }
         Ad assembledAdDto = new Ad();
         assembledAdDto.setAuthor(ad.getUserRelated().getId());
-        assembledAdDto.setPk(Math.toIntExact(ad.getId()));
+        assembledAdDto.setPk(ad.getId());
         assembledAdDto.setImage(ad.getImage());
         assembledAdDto.setPrice(ad.getPrice());
         assembledAdDto.setTitle(ad.getTitle());
@@ -37,7 +37,7 @@ public class AdMappingImpl implements AdMapping {
             return null;
         }
         ExtendedAd assembledExtendedAdDto = new ExtendedAd();
-        assembledExtendedAdDto.setPk(Math.toIntExact(ad.getId()));
+        assembledExtendedAdDto.setPk(ad.getId());
         assembledExtendedAdDto.setAuthorFirstName(ad.getUserRelated().getFirstName());
         assembledExtendedAdDto.setAuthorLastName(ad.getUserRelated().getLastName());
         assembledExtendedAdDto.setDescription(ad.getDescription());
