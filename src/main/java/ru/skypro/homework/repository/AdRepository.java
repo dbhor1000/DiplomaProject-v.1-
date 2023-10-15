@@ -13,5 +13,6 @@ public interface AdRepository extends JpaRepository<Ad, Long> {
     Ad getReferenceById(int id);
     Ad findById(int id);
     void deleteById(int id);
+    Ad save(Ad ad);
 
 }

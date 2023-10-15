@@ -7,8 +7,8 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 
 public interface CommentService {
 
-    public Comments getCommentsOfOneAd(Long AdId);
-    public Comment addCommentToAd(CreateOrUpdateComment commentToAdd, Long adId);
-    public boolean deleteCommentByIdAndAdId(Integer adId, Integer commentId);
-    public boolean patchCommentByIdAndAdId(Integer adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment);
+    public Comments getCommentsOfOneAd(int AdId);
+    public Comment addCommentToAd(CreateOrUpdateComment commentToAdd, int adId);
+    public boolean deleteCommentByIdAndAdId(int adId, Integer commentId);
+    public boolean patchCommentByIdAndAdId(int adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment);
 }

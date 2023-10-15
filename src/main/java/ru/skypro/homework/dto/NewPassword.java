@@ -10,7 +10,7 @@ public class NewPassword {
     @Size(min = 8, max = 16, message = "Текущий пароль слишком длинный или короткий.")
     private String currentPassword;
     @Size(min = 8, max = 16, message = "Новый пароль слишком длинный или короткий.")
-    private String newPassword;
+    private String newPasswordForUpdate;
 
     public String getCurrentPassword() {
         return currentPassword;
@@ -20,11 +20,11 @@ public class NewPassword {
         this.currentPassword = currentPassword;
     }
 
-    public String getNewPassword() {
-        return newPassword;
+    public String getNewPasswordForUpdate() {
+        return newPasswordForUpdate;
     }
 
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
+    public void setNewPasswordForUpdate(String newPasswordForUpdate) {
+        this.newPasswordForUpdate = newPasswordForUpdate;
     }
 }

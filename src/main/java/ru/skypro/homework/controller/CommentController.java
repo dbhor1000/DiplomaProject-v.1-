@@ -12,6 +12,8 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.CommentService;
 
+import javax.transaction.Transactional;
+
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -36,12 +38,12 @@ public class CommentController {
     //Метод работает.
 
     @GetMapping("/{id}/comments")
-    public ResponseEntity<Comments> getAdComments(@PathVariable Integer id) {
+    public ResponseEntity<Comments> getAdComments(@PathVariable int id) {
 
-        if (commentService.getCommentsOfOneAd(id.longValue()) == null) {
+        if (commentService.getCommentsOfOneAd(id) == null) {
             return ResponseEntity.notFound().build();
         } else {
-            Comments retrievedComments = commentService.getCommentsOfOneAd(id.longValue());
+            Comments retrievedComments = commentService.getCommentsOfOneAd(id);
             return ResponseEntity.ok(retrievedComments);
         }
     }
@@ -51,10 +53,10 @@ public class CommentController {
 
     @PostMapping("/{id}/comments")
     public ResponseEntity<?> addCommentToAd(@PathVariable Integer id, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        if (adRepository.getReferenceById(id.longValue()) == null){
+        if (adRepository.getReferenceById(id) == null){
             return ResponseEntity.notFound().build();
         } else {
-            Comment addedComment = commentService.addCommentToAd(createOrUpdateComment, id.longValue());
+            Comment addedComment = commentService.addCommentToAd(createOrUpdateComment, id);
             return ResponseEntity.ok(addedComment);
         }
     }
@@ -62,10 +64,13 @@ public class CommentController {
     //
     //Метод работает.
 
+    @Transactional
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> deleteCommentById(@PathVariable Integer adId, Integer commentId) {
+    public ResponseEntity<?> deleteCommentById(@PathVariable Integer adId, @PathVariable Integer commentId) {
 
-        if (commentService.deleteCommentByIdAndAdId(adId, commentId)) {
+
+        boolean deletedYesNo = commentService.deleteCommentByIdAndAdId(adId, commentId);
+        if (deletedYesNo) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();

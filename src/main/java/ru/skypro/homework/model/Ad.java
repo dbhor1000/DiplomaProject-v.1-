@@ -1,6 +1,7 @@
 package ru.skypro.homework.model;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 import ru.skypro.homework.dto.ExtendedAd;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ public class Ad {
     private String description;
     private Integer price;
     private String title;
-    private String image;
+    private byte[] image;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "USER_ID", nullable = false)
     private UserEntity userRelated;
@@ -75,11 +76,11 @@ public class Ad {
         this.comments = comments;
     }
 
-    public String getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 }

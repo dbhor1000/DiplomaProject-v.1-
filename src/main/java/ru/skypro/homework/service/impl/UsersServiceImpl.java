@@ -3,6 +3,8 @@ package ru.skypro.homework.service.impl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UsersService;
 import ru.skypro.homework.service.mapping.UsersMapping;
+
+import javax.persistence.Query;
 
 
 @Service
@@ -46,17 +50,20 @@ public class UsersServiceImpl implements UsersService {
 
     private final UserRepository userRepository;
     private final UsersMapping usersMapping;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UsersServiceImpl(UserRepository userRepository, UsersMapping userMapping) {
+    public UsersServiceImpl(UserRepository userRepository, UsersMapping usersMapping, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
-        this.usersMapping = userMapping;
+        this.usersMapping = usersMapping;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
     public boolean changePassword(NewPassword newPassword, String username) {
-        if ((newPassword.getCurrentPassword()).equals(newPassword.getNewPassword())) {
-            UserEntity authorizedUser = userRepository.findByUsername(username);
-            authorizedUser.setPassword(newPassword.getNewPassword());
+
+        UserEntity authorizedUser = userRepository.findByUsername(username);
+        if (bCryptPasswordEncoder.matches(newPassword.getCurrentPassword(), authorizedUser.getPassword())) {
+            authorizedUser.setPassword(bCryptPasswordEncoder.encode(newPassword.getNewPasswordForUpdate()));
             userRepository.save(authorizedUser);
             return true;
         } else {

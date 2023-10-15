@@ -43,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
     //4. Обновление комментария по id (+id объявления) - PATCH - DTO: CreateOrUpdateComment
 
     @Override
-    public Comments getCommentsOfOneAd(Long adId) {
+    public Comments getCommentsOfOneAd(int adId) {
         if (adRepository.getReferenceById(adId) != null) {
             Ad adToRetrieveCommentsFrom = adRepository.getReferenceById(adId);
             Comments retrievedComments = commentaryMapping.adCommentsToCommentsDTO(adToRetrieveCommentsFrom);
@@ -54,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment addCommentToAd(CreateOrUpdateComment commentToAdd, Long adId) {
+    public Comment addCommentToAd(CreateOrUpdateComment commentToAdd, int adId) {
 
         if (adRepository.getReferenceById(adId) != null) {
 
@@ -75,14 +75,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public boolean deleteCommentByIdAndAdId(Integer adId, Integer commentId) {
+    public boolean deleteCommentByIdAndAdId(int adId, Integer commentId) {
 
 
-        if (adRepository.getReferenceById(adId.longValue()) != null) {
+        if (adRepository.getReferenceById(adId) != null) {
 
-            Ad adFound = adRepository.getReferenceById(adId.longValue());
+            Ad adFound = adRepository.getReferenceById(adId);
             Commentary commentFound = commentaryRepository.findByAdRelatedAndId(adFound, commentId);
             commentaryRepository.deleteById(commentFound.getId());
+            commentaryRepository.flush();
 
             return true;
 
@@ -94,12 +95,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public boolean patchCommentByIdAndAdId(Integer adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment) {
+    public boolean patchCommentByIdAndAdId(int adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment) {
 
 
-        if (adRepository.getReferenceById(adId.longValue()) != null) {
+        if (adRepository.getReferenceById(adId) != null) {
 
-            Ad adFound = adRepository.getReferenceById(adId.longValue());
+            Ad adFound = adRepository.getReferenceById(adId);
             Commentary commentFound = commentaryRepository.findByAdRelatedAndId(adFound, commentId);
             commentFound.setText(createOrUpdateComment.getText());
             commentaryRepository.save(commentFound);

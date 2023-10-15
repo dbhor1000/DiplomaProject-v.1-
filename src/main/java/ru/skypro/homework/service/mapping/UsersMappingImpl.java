@@ -20,7 +20,7 @@ public class UsersMappingImpl implements UsersMapping {
         }
 
         UserEntity user = new UserEntity();
-        user.setPassword(newPassword.getNewPassword());
+        user.setPassword(newPassword.getNewPasswordForUpdate());
         return user;
     }
 
