@@ -20,7 +20,7 @@ public class UserEntity {
     private String lastName;
     private String phone;
     private Role role;
-    private byte[] image;
+    private String image;
     private String username;
     private String password;
 
@@ -78,11 +78,11 @@ public class UserEntity {
         this.id = id;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,10 @@ import ru.skypro.homework.service.mapping.UsersMapping;
 
 import javax.persistence.Query;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 
 @Service
@@ -97,8 +102,11 @@ public class UsersServiceImpl implements UsersService {
         UserEntity activeUser = userRepository.findByUsername(username);
 
         try {
+
+            String extension = FilenameUtils.getExtension(image.getOriginalFilename());
             byte[] imageToBytes = image.getBytes();
-            activeUser.setImage(imageToBytes);//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+            Path write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
+            activeUser.setImage(write.toString());//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
 
         } catch (IOException e) {
             throw new RuntimeException(e);
