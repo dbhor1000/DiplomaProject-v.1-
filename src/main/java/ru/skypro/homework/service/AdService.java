@@ -25,12 +25,14 @@ public interface AdService {
 
     //***
     public ru.skypro.homework.dto.Ad newAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image, String username);
+    //public ru.skypro.homework.dto.Ad newAd(Ad ad, MultipartFile image, String username);
 
     public ExtendedAd requestAdFromDatabaseById(int id);
 
     public boolean deleteAdById(int id);
     public ru.skypro.homework.model.Ad editAdPatch(CreateOrUpdateAd createOrUpdateAd, int id);
     public Ads authorizedUserAds(String username);
+    public boolean patchAdPictureById(MultipartFile image, int adId);
 
 
 

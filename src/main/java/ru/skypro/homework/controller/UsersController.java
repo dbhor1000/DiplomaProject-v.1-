@@ -66,7 +66,9 @@ public class UsersController {
     //
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> editAuthorizedUserProfilePic(@RequestParam("image") MultipartFile linkedPicture) {
+    public ResponseEntity<?> editAuthorizedUserProfilePic(@RequestParam("image") MultipartFile linkedPicture, Authentication authentication) {
+
+        usersService.patchAuthorizedUserPicture(linkedPicture, authentication.getName());
         return ResponseEntity.ok().build();
     }
 }

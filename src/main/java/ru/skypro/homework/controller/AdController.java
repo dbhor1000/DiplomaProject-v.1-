@@ -57,7 +57,6 @@ public class AdController {
 
     //
     //***
-
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> newAd(@ModelAttribute(name = "properties") CreateOrUpdateAd createOrUpdateAd, @RequestParam("image") MultipartFile picture, Authentication authentication) {
 
@@ -69,6 +68,20 @@ public class AdController {
 
         return ResponseEntity.unprocessableEntity().build();
     }
+
+    //@Transactional
+    //@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    //public ResponseEntity<?> newAd(@ModelAttribute(name = "properties")ru.skypro.homework.dto.Ad ad, @RequestParam("image") MultipartFile picture, Authentication authentication) {
+    //
+    //    ru.skypro.homework.dto.Ad createdAdd = adService.newAd(ad, picture, authentication.getName());
+    //
+    //    if (createdAdd != null) {
+    //        return ResponseEntity.ok(createdAdd);
+    //    }
+    //
+    //    return ResponseEntity.unprocessableEntity().build();
+    //}
+
 
     //
     //Метод работает.
@@ -120,6 +133,7 @@ public class AdController {
 
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> patchAdPictureById(@PathVariable Integer id, @RequestParam("image") MultipartFile linkedPicture) {
+        adService.patchAdPictureById(linkedPicture, id);
         return ResponseEntity.ok().build();
     }
 

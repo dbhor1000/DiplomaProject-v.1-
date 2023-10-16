@@ -3,7 +3,7 @@ package ru.skypro.homework.dto;
 public class Ad {
 
     private Integer author;
-    private byte[] image;
+    private String image;
     private Integer pk;
     private Integer price;
     private String title;
@@ -16,11 +16,11 @@ public class Ad {
         this.author = author;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

@@ -81,8 +81,8 @@ public class CommentController {
     //Метод аботает.
 
     @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> patchCommentById(@PathVariable Integer adId, Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        if (commentService.patchCommentByIdAndAdId(adId, commentId,createOrUpdateComment)) {
+    public ResponseEntity<?> patchCommentById(@PathVariable("adId") Integer adId, @PathVariable("commentId") Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
+        if (commentService.patchCommentByIdAndAdId(adId, commentId, createOrUpdateComment)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();

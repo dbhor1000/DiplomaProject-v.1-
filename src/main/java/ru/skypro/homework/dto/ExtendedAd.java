@@ -9,7 +9,7 @@ public class ExtendedAd {
     private String authorLastName;
     private String description;
     private String email;
-    private byte[] image;
+    private String image;
     private String phone;
     private Integer price;
     private String title;
@@ -54,11 +54,11 @@ public class ExtendedAd {
         this.email = email;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

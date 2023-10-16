@@ -19,7 +19,7 @@ public class Ad {
     private String description;
     private Integer price;
     private String title;
-    private byte[] image;
+    private String image;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "USER_ID", nullable = false)
     private UserEntity userRelated;
@@ -76,11 +76,11 @@ public class Ad {
         this.comments = comments;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 }

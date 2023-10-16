@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.UserNotFoundException;
 import ru.skypro.homework.model.UserEntity;
@@ -16,6 +17,7 @@ import ru.skypro.homework.service.UsersService;
 import ru.skypro.homework.service.mapping.UsersMapping;
 
 import javax.persistence.Query;
+import java.io.IOException;
 
 
 @Service
@@ -50,9 +52,9 @@ public class UsersServiceImpl implements UsersService {
 
     private final UserRepository userRepository;
     private final UsersMapping usersMapping;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder bCryptPasswordEncoder;
 
-    public UsersServiceImpl(UserRepository userRepository, UsersMapping usersMapping, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UsersServiceImpl(UserRepository userRepository, UsersMapping usersMapping, PasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.usersMapping = usersMapping;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -63,7 +65,7 @@ public class UsersServiceImpl implements UsersService {
 
         UserEntity authorizedUser = userRepository.findByUsername(username);
         if (bCryptPasswordEncoder.matches(newPassword.getCurrentPassword(), authorizedUser.getPassword())) {
-            authorizedUser.setPassword(bCryptPasswordEncoder.encode(newPassword.getNewPasswordForUpdate()));
+            authorizedUser.setPassword(bCryptPasswordEncoder.encode(newPassword.getNewPassword()));
             userRepository.save(authorizedUser);
             return true;
         } else {
@@ -89,5 +91,22 @@ public class UsersServiceImpl implements UsersService {
             return updateUser;
     }
 
+    @Override
+    public boolean patchAuthorizedUserPicture(MultipartFile image, String username){
+
+        UserEntity activeUser = userRepository.findByUsername(username);
+
+        try {
+            byte[] imageToBytes = image.getBytes();
+            activeUser.setImage(imageToBytes);//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        userRepository.save(activeUser);
+        return true;
+
+    }
 
 }

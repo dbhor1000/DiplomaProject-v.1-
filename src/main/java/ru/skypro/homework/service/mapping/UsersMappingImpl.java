@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.UserEntity;
 
+import java.util.Arrays;
+
 @Component
 public class UsersMappingImpl implements UsersMapping {
 
@@ -20,7 +22,7 @@ public class UsersMappingImpl implements UsersMapping {
         }
 
         UserEntity user = new UserEntity();
-        user.setPassword(newPassword.getNewPasswordForUpdate());
+        user.setPassword(newPassword.getNewPassword());
         return user;
     }
 
@@ -37,7 +39,7 @@ public class UsersMappingImpl implements UsersMapping {
         user.setLastName(userEntityInput.getLastName());
         user.setPhone(userEntityInput.getPhone());
         user.setRole(userEntityInput.getRole());
-        user.setImage(userEntityInput.getImage());
+        user.setImage(Arrays.toString(userEntityInput.getImage()));
         return user;
     }
 

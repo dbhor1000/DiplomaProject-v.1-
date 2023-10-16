@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
@@ -72,8 +73,11 @@ public class AdServiceImpl implements AdService {
         mappedDTO.setUserRelated(userRepository.findByUsername(username));
 
         try {
+
+            String extension = FilenameUtils.getExtension(image.getOriginalFilename());
             byte[] imageToBytes = image.getBytes();
-            mappedDTO.setImage(imageToBytes);//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+            Path write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
+            mappedDTO.setImage(write.toString());//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -85,6 +89,26 @@ public class AdServiceImpl implements AdService {
 
     }
 
+    //@Override
+    //public ru.skypro.homework.dto.Ad newAd(ru.skypro.homework.dto.Ad ad, MultipartFile image, String username) {
+    //
+    //    try {
+    //
+    //        Ad mappedDTO = adMapping.adDtoToAdEntity(ad);
+    //        mappedDTO.setUserRelated(userRepository.findByUsername(username));
+    //        String extension = FilenameUtils.getExtension(image.getOriginalFilename());
+    //        byte[] imageToBytes = image.getBytes();
+    //        Path write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
+    //        mappedDTO.setImage(write.toString());//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+    //        adRepository.saveAndFlush(mappedDTO);
+    //        ru.skypro.homework.dto.Ad mappedOutput = adMapping.adEntityToAdDto(mappedDTO);
+    //        return mappedOutput;
+    //
+    //    } catch (IOException e) {
+    //        throw new RuntimeException(e);
+    //    }
+    //}
+
     @Override
     public ExtendedAd requestAdFromDatabaseById(int id){
         ExtendedAd adFoundAndMapped = adMapping.adEntityToExtendedAdDto(adRepository.getReferenceById(id));
@@ -94,7 +118,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public boolean deleteAdById(int id) {
 
-        if (adRepository.findById(id) != null) {
+        if (Optional.of(adRepository.findById(id)).isPresent()) {
             adRepository.deleteById(id);
 
 
@@ -106,7 +130,7 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public Ad editAdPatch(CreateOrUpdateAd createOrUpdateAd, int id) {
-        if (adRepository.findById(id) != null) {
+        if (Optional.of(adRepository.findById(id)).isPresent()) {
             Ad adFoundToPatch = adRepository.getReferenceById(id);
             adFoundToPatch.setTitle(createOrUpdateAd.getTitle());
             adFoundToPatch.setPrice(createOrUpdateAd.getPrice());
@@ -125,5 +149,45 @@ public class AdServiceImpl implements AdService {
         Ads authorizedUserAds = adMapping.userAdsToAdsDTO(authorizedUser);
         return authorizedUserAds;
     }
+
+    //@Override
+    //public boolean patchAdPictureById(MultipartFile image, int adId){
+    //
+    //    Ad adToModify = adRepository.findById(adId);
+    //
+    //    try {
+    //        byte[] imageToBytes = image.getBytes();
+    //        adToModify.setImage(imageToBytes);//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+    //
+    //    } catch (IOException e) {
+    //        throw new RuntimeException(e);
+    //    }
+    //
+    //    adRepository.save(adToModify);
+    //    return true;
+    //
+    //}
+
+    @Override
+    public boolean patchAdPictureById(MultipartFile image, int adId){
+
+        Ad adToModify = adRepository.findById(adId);
+
+        try {
+
+            String extension = FilenameUtils.getExtension(image.getOriginalFilename());
+            byte[] imageToBytes = image.getBytes();
+            Path write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
+            adToModify.setImage(write.toString());//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        adRepository.save(adToModify);
+        return true;
+
+    }
+
 
 }
