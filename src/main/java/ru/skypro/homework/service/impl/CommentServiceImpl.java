@@ -1,10 +1,10 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.Comment;
-import ru.skypro.homework.dto.Comments;
-import ru.skypro.homework.dto.CreateOrUpdateComment;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.exception.CommentNotFoundException;
 import ru.skypro.homework.model.Ad;
@@ -12,15 +12,17 @@ import ru.skypro.homework.model.Commentary;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentaryRepository;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.mapping.CommentaryMapping;
 
 import javax.persistence.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 
 @Service
@@ -29,11 +31,13 @@ public class CommentServiceImpl implements CommentService {
     private final AdRepository adRepository;
     private final CommentaryMapping commentaryMapping;
     private final CommentaryRepository commentaryRepository;
+    private final UserRepository userRepository;
 
-    public CommentServiceImpl(AdRepository adRepository, CommentaryMapping commentaryMapping, CommentaryRepository commentaryRepository) {
+    public CommentServiceImpl(AdRepository adRepository, CommentaryMapping commentaryMapping, CommentaryRepository commentaryRepository, UserRepository userRepository) {
         this.adRepository = adRepository;
         this.commentaryMapping = commentaryMapping;
         this.commentaryRepository = commentaryRepository;
+        this.userRepository = userRepository;
     }
 
     //Функционал на фронтенде:
@@ -75,13 +79,18 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public boolean deleteCommentByIdAndAdId(int adId, Integer commentId) {
+    public boolean deleteCommentByIdAndAdId(int adId, Integer commentId, String username) {
+
+        Ad adFound = adRepository.getReferenceById(adId);
+        Commentary commentFound = commentaryRepository.findByAdRelatedAndId(adFound, commentId);
+        UserEntity userWhoCommented = commentFound.getUserRelated();
+        UserEntity authorizedUser = userRepository.findByUsername(username);
+        Role authorizedUserRole = authorizedUser.getRole();
+
+        if ((Optional.of(adFound).isPresent() && Optional.of(commentFound).isPresent() && authorizedUserRole == Role.USER && userWhoCommented == authorizedUser) || (Optional.of(adFound).isPresent() && Optional.of(commentFound).isPresent() && authorizedUserRole == Role.ADMIN)) {
 
 
-        if (adRepository.getReferenceById(adId) != null) {
 
-            Ad adFound = adRepository.getReferenceById(adId);
-            Commentary commentFound = commentaryRepository.findByAdRelatedAndId(adFound, commentId);
             commentaryRepository.deleteById(commentFound.getId());
             commentaryRepository.flush();
 
@@ -95,13 +104,16 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public boolean patchCommentByIdAndAdId(int adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment) {
+    public boolean patchCommentByIdAndAdId(int adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment, String username) {
 
+        Ad adFound = adRepository.getReferenceById(adId);
+        Commentary commentFound = commentaryRepository.findByAdRelatedAndId(adFound, commentId);
+        UserEntity userWhoCommented = commentFound.getUserRelated();
+        UserEntity authorizedUser = userRepository.findByUsername(username);
+        Role authorizedUserRole = authorizedUser.getRole();
 
-        if (adRepository.getReferenceById(adId) != null) {
+        if ((Optional.of(adFound).isPresent() && Optional.of(commentFound).isPresent() && authorizedUserRole == Role.USER && userWhoCommented == authorizedUser) || (Optional.of(adFound).isPresent() && Optional.of(commentFound).isPresent() && authorizedUserRole == Role.ADMIN)) {
 
-            Ad adFound = adRepository.getReferenceById(adId);
-            Commentary commentFound = commentaryRepository.findByAdRelatedAndId(adFound, commentId);
             commentFound.setText(createOrUpdateComment.getText());
             commentaryRepository.save(commentFound);
 

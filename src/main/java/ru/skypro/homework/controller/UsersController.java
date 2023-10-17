@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,14 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.model.UserEntity;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UsersService;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -25,10 +33,17 @@ public class UsersController {
     //4. Обновление аватара авторизованного пользователя - PATCH
 
     private final UsersService usersService;
+    private final UserRepository userRepository;
 
-    public UsersController(UsersService usersService) {
+    //public UsersController(UsersService usersService) {
+    //    this.usersService = usersService;
+    //}
+
+    public UsersController(UsersService usersService, UserRepository userRepository) {
         this.usersService = usersService;
+        this.userRepository = userRepository;
     }
+
 
     //
     //Метод работает.
@@ -70,5 +85,13 @@ public class UsersController {
 
         usersService.patchAuthorizedUserPicture(linkedPicture, authentication.getName());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/images/{id}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
+    public byte[] getImage(Authentication authentication) throws IOException {
+
+        UserEntity userLoggedIn = userRepository.findByUsername(authentication.getName());
+        File file = new File(userLoggedIn.getImage());
+        return Files.readAllBytes(file.toPath());
     }
 }

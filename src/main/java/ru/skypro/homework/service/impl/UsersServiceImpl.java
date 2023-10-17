@@ -18,6 +18,7 @@ import ru.skypro.homework.service.UsersService;
 import ru.skypro.homework.service.mapping.UsersMapping;
 
 import javax.persistence.Query;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -96,6 +97,27 @@ public class UsersServiceImpl implements UsersService {
             return updateUser;
     }
 
+    //@Override
+    //public boolean patchAuthorizedUserPicture(MultipartFile image, String username){
+    //
+    //    UserEntity activeUser = userRepository.findByUsername(username);
+    //
+    //    try {
+    //
+    //        String extension = FilenameUtils.getExtension(image.getOriginalFilename());
+    //        byte[] imageToBytes = image.getBytes();
+    //        Path write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
+    //        String pathToSavedImage = write.toAbsolutePath().toUri().toURL().toString();
+    //        activeUser.setImage(pathToSavedImage);//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+    //
+    //    } catch (IOException e) {
+    //        throw new RuntimeException(e);
+    //    }
+    //
+    //    userRepository.save(activeUser);
+    //    return true;
+    //}
+
     @Override
     public boolean patchAuthorizedUserPicture(MultipartFile image, String username){
 
@@ -106,7 +128,8 @@ public class UsersServiceImpl implements UsersService {
             String extension = FilenameUtils.getExtension(image.getOriginalFilename());
             byte[] imageToBytes = image.getBytes();
             Path write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
-            activeUser.setImage(write.toString());//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+            String pathToSavedImage = write.toAbsolutePath().toString();
+            activeUser.setImage(pathToSavedImage);//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -114,7 +137,6 @@ public class UsersServiceImpl implements UsersService {
 
         userRepository.save(activeUser);
         return true;
-
     }
 
 }

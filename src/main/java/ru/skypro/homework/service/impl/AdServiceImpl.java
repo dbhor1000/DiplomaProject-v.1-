@@ -6,9 +6,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.Ads;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
-import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Commentary;
@@ -116,12 +114,15 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public boolean deleteAdById(int id) {
+    public boolean deleteAdById(int id, String username) {
 
-        if (Optional.of(adRepository.findById(id)).isPresent()) {
+        Ad adFromRepository = adRepository.findById(id);
+        UserEntity userWhoPostedAd = adRepository.findById(id).getUserRelated();
+        UserEntity authorizedUser = userRepository.findByUsername(username);
+        Role authorizedUserRole = authorizedUser.getRole();
+
+        if ((Optional.of(adFromRepository).isPresent() && authorizedUserRole == Role.USER && userWhoPostedAd == authorizedUser) || (Optional.of(adFromRepository).isPresent() && authorizedUserRole == Role.ADMIN)) {
             adRepository.deleteById(id);
-
-
             return true;
         } else {
             throw new AdNotFoundException();
@@ -129,9 +130,15 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Ad editAdPatch(CreateOrUpdateAd createOrUpdateAd, int id) {
-        if (Optional.of(adRepository.findById(id)).isPresent()) {
-            Ad adFoundToPatch = adRepository.getReferenceById(id);
+    public Ad editAdPatch(CreateOrUpdateAd createOrUpdateAd, int id, String username) {
+
+        Ad adFoundToPatch = adRepository.findById(id);
+        UserEntity userWhoPostedAd = adRepository.findById(id).getUserRelated();
+        UserEntity authorizedUser = userRepository.findByUsername(username);
+        Role authorizedUserRole = authorizedUser.getRole();
+
+        if ((Optional.of(adFoundToPatch).isPresent() && authorizedUserRole == Role.USER && userWhoPostedAd == authorizedUser) || (Optional.of(adFoundToPatch).isPresent() && authorizedUserRole == Role.ADMIN)) {
+
             adFoundToPatch.setTitle(createOrUpdateAd.getTitle());
             adFoundToPatch.setPrice(createOrUpdateAd.getPrice());
             adFoundToPatch.setDescription(createOrUpdateAd.getDescription());
@@ -169,25 +176,33 @@ public class AdServiceImpl implements AdService {
     //}
 
     @Override
-    public boolean patchAdPictureById(MultipartFile image, int adId){
+    public boolean patchAdPictureById(MultipartFile image, int adId, String username) {
 
         Ad adToModify = adRepository.findById(adId);
+        UserEntity userWhoPostedAd = adRepository.findById(adId).getUserRelated();
+        UserEntity authorizedUser = userRepository.findByUsername(username);
+        Role authorizedUserRole = authorizedUser.getRole();
+
+
+        Path write = null;
 
         try {
 
             String extension = FilenameUtils.getExtension(image.getOriginalFilename());
             byte[] imageToBytes = image.getBytes();
-            Path write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
-            adToModify.setImage(write.toString());//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+            write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        adRepository.save(adToModify);
-        return true;
+        if ((Optional.of(adToModify).isPresent() && authorizedUserRole == Role.USER && userWhoPostedAd == authorizedUser) || (Optional.of(adToModify).isPresent() && authorizedUserRole == Role.ADMIN)) {
 
+                adToModify.setImage(write.toString());//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+                adRepository.save(adToModify);
+                return true;
+        }
+
+        return false;
     }
-
-
 }

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -57,6 +58,7 @@ public class AdController {
 
     //
     //***
+    //@PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> newAd(@ModelAttribute(name = "properties") CreateOrUpdateAd createOrUpdateAd, @RequestParam("image") MultipartFile picture, Authentication authentication) {
 
@@ -85,6 +87,7 @@ public class AdController {
 
     //
     //Метод работает.
+    //@PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAd> adInfoById(@PathVariable Integer id) {
 
@@ -94,22 +97,25 @@ public class AdController {
 
     //
     //Метод работает.
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @Transactional
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAdById(@PathVariable int id) {
+    public ResponseEntity<?> deleteAdById(@PathVariable int id, Authentication authentication) {
 
-        if (adService.deleteAdById(id)) {
+        if (adService.deleteAdById(id, authentication.getName())) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
     }
 
+
     //
     //Метод работает
 
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PatchMapping("/{id}")
-    public ResponseEntity<?> patchAdById(@PathVariable Integer id, @RequestBody CreateOrUpdateAd createOrUpdateAd) {
-        ru.skypro.homework.model.Ad ad = adService.editAdPatch(createOrUpdateAd, id);
+    public ResponseEntity<?> patchAdById(@PathVariable Integer id, @RequestBody CreateOrUpdateAd createOrUpdateAd, Authentication authentication) {
+        ru.skypro.homework.model.Ad ad = adService.editAdPatch(createOrUpdateAd, id, authentication.getName());
         if (ad == null) {
             return ResponseEntity.notFound().build();
         } else {
@@ -119,6 +125,7 @@ public class AdController {
 
     //
     //Метод работает.
+
 
     @GetMapping("/me")
     public ResponseEntity<?> showAuthorizedUserAd(Authentication authentication) {
@@ -131,11 +138,14 @@ public class AdController {
     //
     //Работа с изображениями на следующих этапах разработки.
 
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> patchAdPictureById(@PathVariable Integer id, @RequestParam("image") MultipartFile linkedPicture) {
-        adService.patchAdPictureById(linkedPicture, id);
+    public ResponseEntity<?> patchAdPictureById(@PathVariable Integer id, @RequestParam("image") MultipartFile linkedPicture, Authentication authentication) {
+        adService.patchAdPictureById(linkedPicture, id, authentication.getName());
         return ResponseEntity.ok().build();
     }
+
+
 
 
 

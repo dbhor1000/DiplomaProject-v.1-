@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
@@ -64,12 +66,13 @@ public class CommentController {
     //
     //Метод работает.
 
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @Transactional
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> deleteCommentById(@PathVariable Integer adId, @PathVariable Integer commentId) {
+    public ResponseEntity<?> deleteCommentById(@PathVariable Integer adId, @PathVariable Integer commentId, Authentication authentication) {
 
 
-        boolean deletedYesNo = commentService.deleteCommentByIdAndAdId(adId, commentId);
+        boolean deletedYesNo = commentService.deleteCommentByIdAndAdId(adId, commentId, authentication.getName());
         if (deletedYesNo) {
             return ResponseEntity.ok().build();
         }
@@ -80,9 +83,10 @@ public class CommentController {
     //
     //Метод аботает.
 
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PatchMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> patchCommentById(@PathVariable("adId") Integer adId, @PathVariable("commentId") Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        if (commentService.patchCommentByIdAndAdId(adId, commentId, createOrUpdateComment)) {
+    public ResponseEntity<?> patchCommentById(@PathVariable("adId") Integer adId, @PathVariable("commentId") Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
+        if (commentService.patchCommentByIdAndAdId(adId, commentId, createOrUpdateComment, authentication.getName())) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
