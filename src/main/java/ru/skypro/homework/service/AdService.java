@@ -22,7 +22,7 @@ public interface AdService {
 
     public List<Ad> getAllAdsFromDatabase();
     public Ads allAdsPassToController();
-    public ru.skypro.homework.dto.Ad newAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image, String username);
+    public Ad newAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image, String username);
     public ExtendedAd requestAdFromDatabaseById(int id);
     public ru.skypro.homework.model.Ad editAdPatch(CreateOrUpdateAd createOrUpdateAd, int id, String username);
     public Ads authorizedUserAds(String username);

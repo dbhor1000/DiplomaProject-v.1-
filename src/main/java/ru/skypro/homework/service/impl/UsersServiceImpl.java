@@ -12,12 +12,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.UserNotFoundException;
+import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.UserEntity;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UsersService;
 import ru.skypro.homework.service.mapping.UsersMapping;
 
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -59,12 +62,15 @@ public class UsersServiceImpl implements UsersService {
     private final UserRepository userRepository;
     private final UsersMapping usersMapping;
     private final PasswordEncoder bCryptPasswordEncoder;
+    private final ImageRepository imageRepository;
 
-    public UsersServiceImpl(UserRepository userRepository, UsersMapping usersMapping, PasswordEncoder bCryptPasswordEncoder) {
+    public UsersServiceImpl(UserRepository userRepository, UsersMapping usersMapping, PasswordEncoder bCryptPasswordEncoder, ImageRepository imageRepository) {
         this.userRepository = userRepository;
         this.usersMapping = usersMapping;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.imageRepository = imageRepository;
     }
+
 
     @Override
     public boolean changePassword(NewPassword newPassword, String username) {
@@ -118,18 +124,44 @@ public class UsersServiceImpl implements UsersService {
     //    return true;
     //}
 
-    @Override
+    //@Override
+    //public ru.skypro.homework.dto.Ad newAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image, String username) {
+    //
+    //    ru.skypro.homework.model.Ad mappedDTO = adMapping.createOrUpdateAdDtoToAdEntity(createOrUpdateAd);
+    //    mappedDTO.setUserRelated(userRepository.findByUsername(username));
+    //
+    //    try {
+    //
+    //        String extension = FilenameUtils.getExtension(image.getOriginalFilename());
+    //        byte[] imageToBytes = image.getBytes();
+    //        Image multipartToEntity = new Image();
+    //        multipartToEntity.setImage(imageToBytes);
+    //        imageRepository.save(multipartToEntity);
+    //        mappedDTO.setImage(multipartToEntity);//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+    //
+    //    } catch (IOException e) {
+    //        throw new RuntimeException(e);
+    //    }
+    //
+    //    adRepository.save(mappedDTO);
+    //    ru.skypro.homework.dto.Ad adDTOForOutput = adMapping.adEntityToAdDto(mappedDTO);
+    //    return adDTOForOutput;
+
+
+
+        @Transactional
+        @Override
     public boolean patchAuthorizedUserPicture(MultipartFile image, String username){
 
         UserEntity activeUser = userRepository.findByUsername(username);
 
         try {
 
-            String extension = FilenameUtils.getExtension(image.getOriginalFilename());
             byte[] imageToBytes = image.getBytes();
-            Path write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
-            String pathToSavedImage = write.toAbsolutePath().toString();
-            activeUser.setImage(pathToSavedImage);//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+            Image multipartToEntity = new Image();
+            multipartToEntity.setImage(imageToBytes);
+            imageRepository.save(multipartToEntity);
+            activeUser.setImageAvatar(multipartToEntity);//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
 
         } catch (IOException e) {
             throw new RuntimeException(e);

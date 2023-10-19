@@ -2,6 +2,7 @@ package ru.skypro.homework.service.impl;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -10,13 +11,16 @@ import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.Commentary;
+import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.CommentaryRepository;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.mapping.AdMapping;
 
+import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,11 +45,13 @@ public class AdServiceImpl implements AdService {
     private final UserRepository userRepository;
     private final AdRepository adRepository;
     private final AdMapping adMapping;
+    private final ImageRepository imageRepository;
 
-    public AdServiceImpl(UserRepository userRepository, AdRepository adRepository, AdMapping adMapping) {
+    public AdServiceImpl(UserRepository userRepository, AdRepository adRepository, AdMapping adMapping, ImageRepository imageRepository) {
         this.userRepository = userRepository;
         this.adRepository = adRepository;
         this.adMapping = adMapping;
+        this.imageRepository = imageRepository;
     }
 
     @Override
@@ -64,6 +70,7 @@ public class AdServiceImpl implements AdService {
         return ads;
     }
 
+    @Transactional
     @Override
     public ru.skypro.homework.dto.Ad newAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image, String username) {
 
@@ -72,20 +79,46 @@ public class AdServiceImpl implements AdService {
 
         try {
 
-            String extension = FilenameUtils.getExtension(image.getOriginalFilename());
             byte[] imageToBytes = image.getBytes();
-            Path write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
-            mappedDTO.setImage(write.toString());//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+            Image multipartToEntity = new Image();
+            multipartToEntity.setImage(imageToBytes);
+            imageRepository.save(multipartToEntity);
+            mappedDTO.setImageAd(multipartToEntity);//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+            adRepository.saveAndFlush(mappedDTO);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        adRepository.save(mappedDTO);
+
         ru.skypro.homework.dto.Ad adDTOForOutput = adMapping.adEntityToAdDto(mappedDTO);
         return adDTOForOutput;
 
     }
+
+    //@Override
+    //public ru.skypro.homework.dto.Ad newAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image, String username) {
+    //
+    //    Ad mappedDTO = adMapping.createOrUpdateAdDtoToAdEntity(createOrUpdateAd);
+    //    mappedDTO.setUserRelated(userRepository.findByUsername(username));
+    //
+    //    try {
+    //
+    //        String extension = FilenameUtils.getExtension(image.getOriginalFilename());
+    //        byte[] imageToBytes = image.getBytes();
+    //        Path write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
+    //        mappedDTO.setImage(write.toString());//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+    //
+    //    } catch (IOException e) {
+    //        throw new RuntimeException(e);
+    //    }
+    //
+    //    adRepository.save(mappedDTO);
+    //    ru.skypro.homework.dto.Ad adDTOForOutput = adMapping.adEntityToAdDto(mappedDTO);
+    //    return adDTOForOutput;
+    //
+    //}
+
 
     //@Override
     //public ru.skypro.homework.dto.Ad newAd(ru.skypro.homework.dto.Ad ad, MultipartFile image, String username) {
@@ -185,12 +218,15 @@ public class AdServiceImpl implements AdService {
 
 
         Path write = null;
+        Image multipartToImage = new Image();
 
         try {
 
             String extension = FilenameUtils.getExtension(image.getOriginalFilename());
             byte[] imageToBytes = image.getBytes();
-            write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
+            //write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
+            multipartToImage.setImage(imageToBytes);
+            imageRepository.save(multipartToImage);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -198,7 +234,7 @@ public class AdServiceImpl implements AdService {
 
         if ((Optional.of(adToModify).isPresent() && authorizedUserRole == Role.USER && userWhoPostedAd == authorizedUser) || (Optional.of(adToModify).isPresent() && authorizedUserRole == Role.ADMIN)) {
 
-                adToModify.setImage(write.toString());//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
+                adToModify.setImageAd(multipartToImage);//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
                 adRepository.save(adToModify);
                 return true;
         }

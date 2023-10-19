@@ -19,12 +19,14 @@ public class Ad {
     private String description;
     private Integer price;
     private String title;
-    private String image;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne
+    @JoinColumn(name = "AD_IMAGE", nullable = true)
+    private Image imageAd;
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "USER_ID", nullable = false)
     private UserEntity userRelated;
     @OneToMany(mappedBy = "adRelated",
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     List<Commentary> comments = new ArrayList<>();
 
@@ -76,11 +78,11 @@ public class Ad {
         this.comments = comments;
     }
 
-    public String getImage() {
-        return image;
+    public Image getImageAd() {
+        return imageAd;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageAd(Image imageAd) {
+        this.imageAd = imageAd;
     }
 }

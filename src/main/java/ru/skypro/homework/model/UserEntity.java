@@ -20,7 +20,9 @@ public class UserEntity {
     private String lastName;
     private String phone;
     private Role role;
-    private String image;
+    @OneToOne
+    @JoinColumn(name = "USER_IMAGE", nullable = true)
+    private Image imageAvatar;
     private String username;
     private String password;
 
@@ -78,12 +80,12 @@ public class UserEntity {
         this.id = id;
     }
 
-    public String getImage() {
-        return image;
+    public Image getImageAvatar() {
+        return imageAvatar;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageAvatar(Image imageAvatar) {
+        this.imageAvatar = imageAvatar;
     }
 
     public String getUsername() {
@@ -117,5 +119,7 @@ public class UserEntity {
     public void setComments(List<Ad> comments) {
         this.comments = comments;
     }
+
+
 }
 

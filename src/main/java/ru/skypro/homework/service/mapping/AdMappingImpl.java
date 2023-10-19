@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Commentary;
 import ru.skypro.homework.model.UserEntity;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 
 import java.util.*;
@@ -12,9 +13,11 @@ import java.util.*;
 public class AdMappingImpl implements AdMapping {
 
     private final UserRepository userRepository;
+    private final ImageRepository imageRepository;
 
-    public AdMappingImpl(UserRepository userRepository) {
+    public AdMappingImpl(UserRepository userRepository, ImageRepository imageRepository) {
         this.userRepository = userRepository;
+        this.imageRepository = imageRepository;
     }
 
     //Этот маппер не нужен(/сломался/требует внимания/выглядит грустным/(был) слишком хорош :P)?
@@ -26,7 +29,7 @@ public class AdMappingImpl implements AdMapping {
         Ad assembledAdDto = new Ad();
         assembledAdDto.setAuthor(ad.getUserRelated().getId());
         assembledAdDto.setPk(ad.getId());
-        assembledAdDto.setImage(ad.getImage());
+        assembledAdDto.setImage("ads/" + ad.getImageAd().getId() + "/adPicture");
         assembledAdDto.setPrice(ad.getPrice());
         assembledAdDto.setTitle(ad.getTitle());
         return assembledAdDto;
@@ -42,7 +45,7 @@ public class AdMappingImpl implements AdMapping {
         assembledExtendedAdDto.setAuthorLastName(ad.getUserRelated().getLastName());
         assembledExtendedAdDto.setDescription(ad.getDescription());
         assembledExtendedAdDto.setEmail(ad.getUserRelated().getUsername());
-        assembledExtendedAdDto.setImage(ad.getImage());
+        assembledExtendedAdDto.setImage("ads/" + ad.getImageAd().getId() + "/adPicture");
         assembledExtendedAdDto.setPhone(ad.getUserRelated().getPhone());
         assembledExtendedAdDto.setPrice(ad.getPrice());
         assembledExtendedAdDto.setTitle(ad.getTitle());
@@ -50,23 +53,25 @@ public class AdMappingImpl implements AdMapping {
 
     }
 
-    @Override
-    public ru.skypro.homework.model.Ad adDtoToAdEntity(Ad ad){
-        if (ad == null) {
-            return null;
-        }
+    //Метод не задействован.
 
-        List<Commentary> comments = new ArrayList<>();
-        ru.skypro.homework.model.Ad modifiedAdEntity = new ru.skypro.homework.model.Ad();
-        modifiedAdEntity.setComments(comments);
-        modifiedAdEntity.setUserRelated(userRepository.getReferenceById((ad.getAuthor().longValue())));
-        //modifiedAdEntity.setId(ad.getPk().longValue()); //Сеттер для поля Long принимает Integer? ? ?
-        modifiedAdEntity.setImage(ad.getImage());
-        modifiedAdEntity.setPrice(ad.getPrice());
-        modifiedAdEntity.setTitle(ad.getTitle());
-        return modifiedAdEntity;
-
-    }
+    //@Override
+    //public ru.skypro.homework.model.Ad adDtoToAdEntity(Ad ad){
+    //    if (ad == null) {
+    //        return null;
+    //    }
+    //
+    //    List<Commentary> comments = new ArrayList<>();
+    //    ru.skypro.homework.model.Ad modifiedAdEntity = new ru.skypro.homework.model.Ad();
+    //    modifiedAdEntity.setComments(comments);
+    //    modifiedAdEntity.setUserRelated(userRepository.getReferenceById((ad.getAuthor().longValue())));
+    //    //modifiedAdEntity.setId(ad.getPk().longValue()); //Сеттер для поля Long принимает Integer? ? ?
+    //    modifiedAdEntity.setImage(null);
+    //    modifiedAdEntity.setPrice(ad.getPrice());
+    //    modifiedAdEntity.setTitle(ad.getTitle());
+    //    return modifiedAdEntity;
+    //
+    //}
 
     @Override
     public ru.skypro.homework.model.Ad createOrUpdateAdDtoToAdEntity (CreateOrUpdateAd createOrUpdateAd){

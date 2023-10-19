@@ -15,12 +15,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.Image;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.mapping.AdMapping;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
+import java.io.IOException;
 
 
 @Slf4j
@@ -41,11 +45,13 @@ public class AdController {
     private final AdService adService;
     private final AdMapping adMapping;
     private final UserRepository userRepository;
+    private final ImageRepository imageRepository;
 
-    public AdController(AdService adService, AdMapping adMapping, UserRepository userRepository) {
+    public AdController(AdService adService, AdMapping adMapping, UserRepository userRepository, ImageRepository imageRepository) {
         this.adService = adService;
         this.adMapping = adMapping;
         this.userRepository = userRepository;
+        this.imageRepository = imageRepository;
     }
 
     @GetMapping
@@ -56,33 +62,20 @@ public class AdController {
         return ResponseEntity.ok(ads);
     }
 
-    //
     //***
-    //@PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> newAd(@ModelAttribute(name = "properties") CreateOrUpdateAd createOrUpdateAd, @RequestParam("image") MultipartFile picture, Authentication authentication) {
+    //@RequestMapping(value = "", method = RequestMethod.POST, consumes = {"multipart/form-data"})
+    @ResponseBody
+    public ResponseEntity<?> newAd(@ModelAttribute("properties") @Valid CreateOrUpdateAd createOrUpdateAd, @RequestPart("image") @Valid MultipartFile picture, Authentication authentication) {
 
-        ru.skypro.homework.dto.Ad createdAdd = adService.newAd(createOrUpdateAd, picture, authentication.getName());
+        ru.skypro.homework.dto.Ad createdAdd = adService.newAd(createOrUpdateAd, picture, "dmitry.hrshn@skyeng.ru");
 
         if (createdAdd != null) {
             return ResponseEntity.ok(createdAdd);
         }
 
-        return ResponseEntity.unprocessableEntity().build();
+        return ResponseEntity.badRequest().build();
     }
-
-    //@Transactional
-    //@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    //public ResponseEntity<?> newAd(@ModelAttribute(name = "properties")ru.skypro.homework.dto.Ad ad, @RequestParam("image") MultipartFile picture, Authentication authentication) {
-    //
-    //    ru.skypro.homework.dto.Ad createdAdd = adService.newAd(ad, picture, authentication.getName());
-    //
-    //    if (createdAdd != null) {
-    //        return ResponseEntity.ok(createdAdd);
-    //    }
-    //
-    //    return ResponseEntity.unprocessableEntity().build();
-    //}
 
 
     //
@@ -143,6 +136,17 @@ public class AdController {
     public ResponseEntity<?> patchAdPictureById(@PathVariable Integer id, @RequestParam("image") MultipartFile linkedPicture, Authentication authentication) {
         adService.patchAdPictureById(linkedPicture, id, authentication.getName());
         return ResponseEntity.ok().build();
+    }
+
+    @Transactional
+    @GetMapping(value = "/{id}/adPicture", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
+    public byte[] getImage(@PathVariable Integer id) throws IOException {
+
+        //Метод получает картинку в формате byte[] из Entity Image, хранящегося в репозитории.
+        //Изображения в Ad и UserEntity хранятся в качестве ссылок на объекты в репозитории Image.
+
+        Image image = imageRepository.getReferenceById(id);
+        return image.getImage();
     }
 
 

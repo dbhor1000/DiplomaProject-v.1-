@@ -11,10 +11,13 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
+import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.UserEntity;
+import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UsersService;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,15 +36,17 @@ public class UsersController {
     //4. Обновление аватара авторизованного пользователя - PATCH
 
     private final UsersService usersService;
-    private final UserRepository userRepository;
+    private final UserRepository userRepository; // **
+    private final ImageRepository imageRepository; //**
 
     //public UsersController(UsersService usersService) {
     //    this.usersService = usersService;
     //}
 
-    public UsersController(UsersService usersService, UserRepository userRepository) {
+    public UsersController(UsersService usersService, UserRepository userRepository, ImageRepository imageRepository) {
         this.usersService = usersService;
         this.userRepository = userRepository;
+        this.imageRepository = imageRepository;
     }
 
 
@@ -87,11 +92,14 @@ public class UsersController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/images/{id}", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
-    public byte[] getImage(Authentication authentication) throws IOException {
+    @Transactional
+    @GetMapping(value = "/{id}/avatar", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})
+    public byte[] getImage(@PathVariable Integer id) throws IOException {
 
-        UserEntity userLoggedIn = userRepository.findByUsername(authentication.getName());
-        File file = new File(userLoggedIn.getImage());
-        return Files.readAllBytes(file.toPath());
+        //Метод получает картинку в формате byte[] из Entity Image, хранящегося в репозитории.
+        //Изображения в Ad и UserEntity хранятся в качестве ссылок на объекты в репозитории Image.
+
+        Image image = imageRepository.getReferenceById(id);
+        return image.getImage();
     }
 }

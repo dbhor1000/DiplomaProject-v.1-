@@ -17,7 +17,7 @@ public interface AdMapping {
 
     public ExtendedAd adEntityToExtendedAdDto(ru.skypro.homework.model.Ad ad);
 
-    public ru.skypro.homework.model.Ad adDtoToAdEntity(Ad ad);
+    //public ru.skypro.homework.model.Ad adDtoToAdEntity(Ad ad);
 
     public ru.skypro.homework.model.Ad createOrUpdateAdDtoToAdEntity (CreateOrUpdateAd createOrUpdateAd);
     public Ads userAdsToAdsDTO(UserEntity userEntity);
