@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.AdNotFoundException;
-import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.Commentary;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.UserEntity;
@@ -55,9 +55,9 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public List<ru.skypro.homework.dto.Ad> getAllAdsFromDatabase() {
-        List<Ad> allAdsFromDatabaseCollect = adRepository.findAll();
-        List<ru.skypro.homework.dto.Ad> allAdsInDTO = adMapping.AdEntityListToAdsDto(allAdsFromDatabaseCollect);
+    public List<Ad> getAllAdsFromDatabase() {
+        List<AdEntity> allAdsFromDatabaseCollect = adRepository.findAll();
+        List<Ad> allAdsInDTO = adMapping.AdEntityListToAdsDto(allAdsFromDatabaseCollect);
         return allAdsInDTO;
     }
 
@@ -72,9 +72,9 @@ public class AdServiceImpl implements AdService {
 
     @Transactional
     @Override
-    public ru.skypro.homework.dto.Ad newAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image, String username) {
+    public Ad newAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image, String username) {
 
-        Ad mappedDTO = adMapping.createOrUpdateAdDtoToAdEntity(createOrUpdateAd);
+        AdEntity mappedDTO = adMapping.createOrUpdateAdDtoToAdEntity(createOrUpdateAd);
         mappedDTO.setUserRelated(userRepository.findByUsername(username));
 
         try {
@@ -91,7 +91,8 @@ public class AdServiceImpl implements AdService {
         }
 
 
-        ru.skypro.homework.dto.Ad adDTOForOutput = adMapping.adEntityToAdDto(mappedDTO);
+        //Ad adDTOForOutput = adMapping.adEntityToAdDto(mappedDTO);
+        Ad adDTOForOutput = adMapping.adEntityToAdDto(mappedDTO);
         return adDTOForOutput;
 
     }
@@ -149,7 +150,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public boolean deleteAdById(int id, String username) {
 
-        Ad adFromRepository = adRepository.findById(id);
+        AdEntity adFromRepository = adRepository.findById(id);
         UserEntity userWhoPostedAd = adRepository.findById(id).getUserRelated();
         UserEntity authorizedUser = userRepository.findByUsername(username);
         Role authorizedUserRole = authorizedUser.getRole();
@@ -163,9 +164,9 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Ad editAdPatch(CreateOrUpdateAd createOrUpdateAd, int id, String username) {
+    public AdEntity editAdPatch(CreateOrUpdateAd createOrUpdateAd, int id, String username) {
 
-        Ad adFoundToPatch = adRepository.findById(id);
+        AdEntity adFoundToPatch = adRepository.findById(id);
         UserEntity userWhoPostedAd = adRepository.findById(id).getUserRelated();
         UserEntity authorizedUser = userRepository.findByUsername(username);
         Role authorizedUserRole = authorizedUser.getRole();
@@ -211,7 +212,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public boolean patchAdPictureById(MultipartFile image, int adId, String username) {
 
-        Ad adToModify = adRepository.findById(adId);
+        AdEntity adToModify = adRepository.findById(adId);
         UserEntity userWhoPostedAd = adRepository.findById(adId).getUserRelated();
         UserEntity authorizedUser = userRepository.findByUsername(username);
         Role authorizedUserRole = authorizedUser.getRole();

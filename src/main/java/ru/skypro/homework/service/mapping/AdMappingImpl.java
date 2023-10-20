@@ -2,7 +2,7 @@ package ru.skypro.homework.service.mapping;
 
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.model.Commentary;
+import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
@@ -22,7 +22,7 @@ public class AdMappingImpl implements AdMapping {
 
     //Этот маппер не нужен(/сломался/требует внимания/выглядит грустным/(был) слишком хорош :P)?
     @Override
-    public Ad adEntityToAdDto(ru.skypro.homework.model.Ad ad) {
+    public Ad adEntityToAdDto(AdEntity ad) {
         if (ad == null) {
             return null;
         }
@@ -35,7 +35,7 @@ public class AdMappingImpl implements AdMapping {
         return assembledAdDto;
     }
     @Override
-    public ExtendedAd adEntityToExtendedAdDto(ru.skypro.homework.model.Ad ad) {
+    public ExtendedAd adEntityToExtendedAdDto(AdEntity ad) {
         if (ad == null) {
             return null;
         }
@@ -74,12 +74,12 @@ public class AdMappingImpl implements AdMapping {
     //}
 
     @Override
-    public ru.skypro.homework.model.Ad createOrUpdateAdDtoToAdEntity (CreateOrUpdateAd createOrUpdateAd){
+    public AdEntity createOrUpdateAdDtoToAdEntity (CreateOrUpdateAd createOrUpdateAd){
         if (createOrUpdateAd == null) {
             return null;
         }
 
-        ru.skypro.homework.model.Ad modifiedAdEntity = new ru.skypro.homework.model.Ad();
+        AdEntity modifiedAdEntity = new AdEntity();
         modifiedAdEntity.setPrice(createOrUpdateAd.getPrice());
         modifiedAdEntity.setTitle(createOrUpdateAd.getTitle());
         modifiedAdEntity.setDescription(createOrUpdateAd.getDescription());
@@ -88,12 +88,12 @@ public class AdMappingImpl implements AdMapping {
     }
 
     @Override
-    public List<Ad> AdEntityListToAdsDto(List<ru.skypro.homework.model.Ad> inputAdList) {
+    public List<Ad> AdEntityListToAdsDto(List<AdEntity> inputAdList) {
         if (inputAdList == null) {
             return null;
         }
         List<Ad> mappedList = new ArrayList<Ad>(inputAdList.size());
-        for (ru.skypro.homework.model.Ad ad : inputAdList) {
+        for (AdEntity ad : inputAdList) {
             mappedList.add(adEntityToAdDto(ad));
         }
         return mappedList;

@@ -14,7 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
@@ -108,7 +108,7 @@ public class AdController {
     //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PatchMapping("/{id}")
     public ResponseEntity<?> patchAdById(@PathVariable Integer id, @RequestBody CreateOrUpdateAd createOrUpdateAd, Authentication authentication) {
-        ru.skypro.homework.model.Ad ad = adService.editAdPatch(createOrUpdateAd, id, authentication.getName());
+        AdEntity ad = adService.editAdPatch(createOrUpdateAd, id, authentication.getName());
         if (ad == null) {
             return ResponseEntity.notFound().build();
         } else {

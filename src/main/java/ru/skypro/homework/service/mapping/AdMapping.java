@@ -5,21 +5,23 @@ import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.UserEntity;
 
 import java.util.List;
 
 public interface AdMapping {
 
-    public List<Ad> AdEntityListToAdsDto(List<ru.skypro.homework.model.Ad> inputAdList);
+    public List<Ad> AdEntityListToAdsDto(List<AdEntity> inputAdList);
 
-    public Ad adEntityToAdDto(ru.skypro.homework.model.Ad ad);
+    //Этот маппер не нужен(/сломался/требует внимания/выглядит грустным/(был) слишком хорош :P)?
+    Ad adEntityToAdDto(AdEntity ad);
 
-    public ExtendedAd adEntityToExtendedAdDto(ru.skypro.homework.model.Ad ad);
+    public ExtendedAd adEntityToExtendedAdDto(AdEntity ad);
 
     //public ru.skypro.homework.model.Ad adDtoToAdEntity(Ad ad);
 
-    public ru.skypro.homework.model.Ad createOrUpdateAdDtoToAdEntity (CreateOrUpdateAd createOrUpdateAd);
+    public AdEntity createOrUpdateAdDtoToAdEntity (CreateOrUpdateAd createOrUpdateAd);
     public Ads userAdsToAdsDTO(UserEntity userEntity);
 
 }

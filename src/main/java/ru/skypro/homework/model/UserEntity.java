@@ -29,12 +29,12 @@ public class UserEntity {
     @OneToMany(mappedBy = "userRelated",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
-    List<Ad> ads = new ArrayList<>();
+    List<AdEntity> ads = new ArrayList<>();
 
     @OneToMany(mappedBy = "userRelated",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
-    List<Ad> comments = new ArrayList<>();
+    List<AdEntity> comments = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -104,22 +104,20 @@ public class UserEntity {
         this.password = password;
     }
 
-    public List<Ad> getAds() {
+    public List<AdEntity> getAds() {
         return ads;
     }
 
-    public void setAds(List<Ad> ads) {
+    public void setAds(List<AdEntity> ads) {
         this.ads = ads;
     }
 
-    public List<Ad> getComments() {
+    public List<AdEntity> getComments() {
         return comments;
     }
 
-    public void setComments(List<Ad> comments) {
+    public void setComments(List<AdEntity> comments) {
         this.comments = comments;
     }
-
-
 }
 

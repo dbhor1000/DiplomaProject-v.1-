@@ -26,7 +26,7 @@ public class Commentary {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "AD_ID", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Ad adRelated;
+    private AdEntity adRelated;
 
     public int getId() {
         return id;
@@ -60,11 +60,11 @@ public class Commentary {
         this.userRelated = userRelated;
     }
 
-    public Ad getAdRelated() {
+    public AdEntity getAdRelated() {
         return adRelated;
     }
 
-    public void setAdRelated(Ad adRelated) {
+    public void setAdRelated(AdEntity adRelated) {
         this.adRelated = adRelated;
     }
 }

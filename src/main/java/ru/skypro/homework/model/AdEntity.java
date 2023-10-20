@@ -11,7 +11,7 @@ import java.util.*;
 @EqualsAndHashCode
 @AllArgsConstructor
 @Entity
-public class Ad {
+public class AdEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

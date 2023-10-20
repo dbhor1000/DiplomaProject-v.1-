@@ -26,7 +26,7 @@ public class Image {
     @OneToOne(mappedBy = "imageAvatar")
     private UserEntity userEntity;
     @OneToOne(mappedBy = "imageAd")
-    private Ad ad;
+    private AdEntity ad;
 
     public int getId() {
         return id;

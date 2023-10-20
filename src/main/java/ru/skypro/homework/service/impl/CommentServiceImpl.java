@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.exception.CommentNotFoundException;
-import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.Commentary;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AdRepository;
@@ -49,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comments getCommentsOfOneAd(int adId) {
         if (adRepository.getReferenceById(adId) != null) {
-            Ad adToRetrieveCommentsFrom = adRepository.getReferenceById(adId);
+            AdEntity adToRetrieveCommentsFrom = adRepository.getReferenceById(adId);
             Comments retrievedComments = commentaryMapping.adCommentsToCommentsDTO(adToRetrieveCommentsFrom);
             return retrievedComments;
         } else {
@@ -62,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
 
         if (adRepository.getReferenceById(adId) != null) {
 
-            Ad adToAddCommentTo = adRepository.getReferenceById(adId);
+            AdEntity adToAddCommentTo = adRepository.getReferenceById(adId);
 
             Commentary mappedInputDTO = commentaryMapping.createOrUpdateCommentDtoToCommentaryEntity(commentToAdd);
 
@@ -81,7 +81,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public boolean deleteCommentByIdAndAdId(int adId, Integer commentId, String username) {
 
-        Ad adFound = adRepository.getReferenceById(adId);
+        AdEntity adFound = adRepository.getReferenceById(adId);
         Commentary commentFound = commentaryRepository.findByAdRelatedAndId(adFound, commentId);
         UserEntity userWhoCommented = commentFound.getUserRelated();
         UserEntity authorizedUser = userRepository.findByUsername(username);
@@ -106,7 +106,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public boolean patchCommentByIdAndAdId(int adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment, String username) {
 
-        Ad adFound = adRepository.getReferenceById(adId);
+        AdEntity adFound = adRepository.getReferenceById(adId);
         Commentary commentFound = commentaryRepository.findByAdRelatedAndId(adFound, commentId);
         UserEntity userWhoCommented = commentFound.getUserRelated();
         UserEntity authorizedUser = userRepository.findByUsername(username);
