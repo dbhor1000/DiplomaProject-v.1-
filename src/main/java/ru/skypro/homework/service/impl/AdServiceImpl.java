@@ -1,33 +1,22 @@
 package ru.skypro.homework.service.impl;
 
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.model.AdEntity;
-import ru.skypro.homework.model.Commentary;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.AdRepository;
-import ru.skypro.homework.repository.CommentaryRepository;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.mapping.AdMapping;
 
 import javax.transaction.Transactional;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -147,6 +136,7 @@ public class AdServiceImpl implements AdService {
         return adFoundAndMapped;
     }
 
+    @Transactional
     @Override
     public boolean deleteAdById(int id, String username) {
 
@@ -157,6 +147,7 @@ public class AdServiceImpl implements AdService {
 
         if ((Optional.of(adFromRepository).isPresent() && authorizedUserRole == Role.USER && userWhoPostedAd == authorizedUser) || (Optional.of(adFromRepository).isPresent() && authorizedUserRole == Role.ADMIN)) {
             adRepository.deleteById(id);
+            adRepository.flush();
             return true;
         } else {
             throw new AdNotFoundException();
@@ -191,24 +182,6 @@ public class AdServiceImpl implements AdService {
         return authorizedUserAds;
     }
 
-    //@Override
-    //public boolean patchAdPictureById(MultipartFile image, int adId){
-    //
-    //    Ad adToModify = adRepository.findById(adId);
-    //
-    //    try {
-    //        byte[] imageToBytes = image.getBytes();
-    //        adToModify.setImage(imageToBytes);//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
-    //
-    //    } catch (IOException e) {
-    //        throw new RuntimeException(e);
-    //    }
-    //
-    //    adRepository.save(adToModify);
-    //    return true;
-    //
-    //}
-
     @Override
     public boolean patchAdPictureById(MultipartFile image, int adId, String username) {
 
@@ -217,15 +190,11 @@ public class AdServiceImpl implements AdService {
         UserEntity authorizedUser = userRepository.findByUsername(username);
         Role authorizedUserRole = authorizedUser.getRole();
 
-
-        Path write = null;
         Image multipartToImage = new Image();
 
         try {
 
-            String extension = FilenameUtils.getExtension(image.getOriginalFilename());
             byte[] imageToBytes = image.getBytes();
-            //write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
             multipartToImage.setImage(imageToBytes);
             imageRepository.save(multipartToImage);
 
@@ -241,5 +210,11 @@ public class AdServiceImpl implements AdService {
         }
 
         return false;
+    }
+
+    @Override
+    public AdEntity callAdById (int id) {
+        AdEntity adEntity = adRepository.getReferenceById(id);
+        return adEntity;
     }
 }

@@ -1,8 +1,5 @@
 package ru.skypro.homework.dto;
 
-import lombok.Data;
-import org.springdoc.api.ErrorMessage;
-
 import javax.validation.constraints.Size;
 
 public class NewPassword {

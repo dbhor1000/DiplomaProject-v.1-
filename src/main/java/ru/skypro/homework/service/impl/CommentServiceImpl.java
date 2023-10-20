@@ -1,10 +1,10 @@
 package ru.skypro.homework.service.impl;
 
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.*;
+import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.Comments;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.exception.CommentNotFoundException;
 import ru.skypro.homework.model.AdEntity;
@@ -16,13 +16,7 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.mapping.CommentaryMapping;
 
-import javax.persistence.*;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.util.*;
+import java.util.Optional;
 
 
 @Service
@@ -63,15 +57,10 @@ public class CommentServiceImpl implements CommentService {
         if (adRepository.getReferenceById(adId) != null) {
 
             AdEntity adToAddCommentTo = adRepository.getReferenceById(adId);
-
             Commentary mappedInputDTO = commentaryMapping.createOrUpdateCommentDtoToCommentaryEntity(commentToAdd);
-
             mappedInputDTO.setUserRelated(adToAddCommentTo.getUserRelated());
-
             mappedInputDTO.setAdRelated(adToAddCommentTo);
-
             commentaryRepository.save(mappedInputDTO);
-
             return commentaryMapping.commentEntityToCommentDto(mappedInputDTO);
         } else {
             throw new AdNotFoundException();
@@ -89,17 +78,12 @@ public class CommentServiceImpl implements CommentService {
 
         if ((Optional.of(adFound).isPresent() && Optional.of(commentFound).isPresent() && authorizedUserRole == Role.USER && userWhoCommented == authorizedUser) || (Optional.of(adFound).isPresent() && Optional.of(commentFound).isPresent() && authorizedUserRole == Role.ADMIN)) {
 
-
-
             commentaryRepository.deleteById(commentFound.getId());
             commentaryRepository.flush();
-
             return true;
-
             } else {
 
                 throw new CommentNotFoundException();
-
         }
     }
 
@@ -116,13 +100,9 @@ public class CommentServiceImpl implements CommentService {
 
             commentFound.setText(createOrUpdateComment.getText());
             commentaryRepository.save(commentFound);
-
             return true;
-
         } else {
-
             throw new CommentNotFoundException();
-
         }
     }
 

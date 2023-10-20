@@ -1,17 +1,11 @@
 package ru.skypro.homework.service.impl;
 
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.*;
-import ru.skypro.homework.exception.UserNotFoundException;
+import ru.skypro.homework.dto.NewPassword;
+import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.User;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.ImageRepository;
@@ -19,14 +13,8 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.UsersService;
 import ru.skypro.homework.service.mapping.UsersMapping;
 
-import javax.persistence.Query;
 import javax.transaction.Transactional;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.UUID;
 
 
 @Service
@@ -103,60 +91,12 @@ public class UsersServiceImpl implements UsersService {
             return updateUser;
     }
 
-    //@Override
-    //public boolean patchAuthorizedUserPicture(MultipartFile image, String username){
-    //
-    //    UserEntity activeUser = userRepository.findByUsername(username);
-    //
-    //    try {
-    //
-    //        String extension = FilenameUtils.getExtension(image.getOriginalFilename());
-    //        byte[] imageToBytes = image.getBytes();
-    //        Path write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
-    //        String pathToSavedImage = write.toAbsolutePath().toUri().toURL().toString();
-    //        activeUser.setImage(pathToSavedImage);//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
-    //
-    //    } catch (IOException e) {
-    //        throw new RuntimeException(e);
-    //    }
-    //
-    //    userRepository.save(activeUser);
-    //    return true;
-    //}
-
-    //@Override
-    //public ru.skypro.homework.dto.Ad newAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image, String username) {
-    //
-    //    ru.skypro.homework.model.Ad mappedDTO = adMapping.createOrUpdateAdDtoToAdEntity(createOrUpdateAd);
-    //    mappedDTO.setUserRelated(userRepository.findByUsername(username));
-    //
-    //    try {
-    //
-    //        String extension = FilenameUtils.getExtension(image.getOriginalFilename());
-    //        byte[] imageToBytes = image.getBytes();
-    //        Image multipartToEntity = new Image();
-    //        multipartToEntity.setImage(imageToBytes);
-    //        imageRepository.save(multipartToEntity);
-    //        mappedDTO.setImage(multipartToEntity);//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
-    //
-    //    } catch (IOException e) {
-    //        throw new RuntimeException(e);
-    //    }
-    //
-    //    adRepository.save(mappedDTO);
-    //    ru.skypro.homework.dto.Ad adDTOForOutput = adMapping.adEntityToAdDto(mappedDTO);
-    //    return adDTOForOutput;
-
-
-
-        @Transactional
-        @Override
+    @Transactional
+    @Override
     public boolean patchAuthorizedUserPicture(MultipartFile image, String username){
-
         UserEntity activeUser = userRepository.findByUsername(username);
 
         try {
-
             byte[] imageToBytes = image.getBytes();
             Image multipartToEntity = new Image();
             multipartToEntity.setImage(imageToBytes);
@@ -170,5 +110,4 @@ public class UsersServiceImpl implements UsersService {
         userRepository.save(activeUser);
         return true;
     }
-
 }

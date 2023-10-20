@@ -1,6 +1,8 @@
 package ru.skypro.homework.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;

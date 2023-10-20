@@ -1,7 +1,5 @@
 package ru.skypro.homework.dto;
 
-import lombok.Data;
-
 public class ExtendedAd {
 
     private Integer pk;

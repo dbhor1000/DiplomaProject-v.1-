@@ -1,17 +1,13 @@
 package ru.skypro.homework.controller;
 
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
-import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.CommentService;
 
 import javax.transaction.Transactional;
@@ -30,11 +26,11 @@ public class CommentController {
     //4. Обновление комментария по id (+id объявления) - PATCH - DTO: CreateOrUpdateComment
 
     private final CommentService commentService;
-    private final AdRepository adRepository;
+    private final AdService adService;
 
-    public CommentController(CommentService commentService, AdRepository adRepository) {
+    public CommentController(CommentService commentService, AdService adService) {
         this.commentService = commentService;
-        this.adRepository = adRepository;
+        this.adService = adService;
     }
 
     //Метод работает.
@@ -55,7 +51,7 @@ public class CommentController {
 
     @PostMapping("/{id}/comments")
     public ResponseEntity<?> addCommentToAd(@PathVariable Integer id, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        if (adRepository.getReferenceById(id) == null){
+        if (adService.callAdById(id) == null) {
             return ResponseEntity.notFound().build();
         } else {
             Comment addedComment = commentService.addCommentToAd(createOrUpdateComment, id);

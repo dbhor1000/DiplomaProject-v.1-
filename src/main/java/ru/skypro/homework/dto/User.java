@@ -1,7 +1,5 @@
 package ru.skypro.homework.dto;
 
-import lombok.Data;
-
 public class User {
 
     private Integer id;

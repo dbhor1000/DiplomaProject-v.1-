@@ -1,10 +1,11 @@
 package ru.skypro.homework.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.lang.Nullable;
-import ru.skypro.homework.dto.Comment;
 
 import javax.persistence.*;
 

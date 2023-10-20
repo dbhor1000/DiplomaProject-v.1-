@@ -1,19 +1,14 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.model.UserEntity;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
-import ru.skypro.homework.service.CustomUserDetailsService;
 import ru.skypro.homework.service.mapping.UsersMapping;
-
-import java.util.ArrayList;
 
 
 @Service
@@ -45,21 +40,6 @@ public class AuthServiceImpl implements AuthService {
             //return (password.equals(userDetails.getPassword()));
         }
     }
-
-    //@Override
-    //public boolean register(Register register) {
-    //    if (manager.userExists(register.getUsername())) {
-    //        return false;
-    //    }
-    //    manager.createUser(
-    //            User.builder()
-    //                    .passwordEncoder(this.encoder::encode)
-    //                    .password(register.getPassword())
-    //                    .username(register.getUsername())
-    //                    .roles(register.getRole().name())
-    //                    .build());
-    //    return true;
-    //}
 
     @Override
     public boolean register(Register register){

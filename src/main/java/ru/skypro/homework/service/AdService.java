@@ -6,7 +6,6 @@ import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.AdEntity;
-import ru.skypro.homework.model.UserEntity;
 
 import java.util.List;
 
@@ -29,11 +28,6 @@ public interface AdService {
     public Ads authorizedUserAds(String username);
     public boolean patchAdPictureById(MultipartFile image, int adId, String username);
     public boolean deleteAdById(int id, String username);
-
-
-
-
-
-
+    public AdEntity callAdById (int id);
 
 }

@@ -1,15 +1,14 @@
 package ru.skypro.homework.service.mapping;
 
-import org.apache.el.stream.Stream;
 import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
-import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.Commentary;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class CommentaryMappingImpl implements CommentaryMapping {
@@ -21,7 +20,11 @@ public class CommentaryMappingImpl implements CommentaryMapping {
         }
         Comment comment = new Comment();
         comment.setAuthor(commentary.getUserRelated().getId());
-        comment.setAuthorImage("/users/" + commentary.getUserRelated().getImageAvatar().getId() + "/avatar/");
+        if(commentary.getUserRelated().getImageAvatar() != null) {
+            comment.setAuthorImage("/users/" + commentary.getUserRelated().getImageAvatar().getId() + "/avatar/");
+        } else {
+            comment.setAuthorImage(null);
+        }
         comment.setAuthorFirstName(commentary.getUserRelated().getFirstName());
         comment.setCreatedAt(commentary.getCreatedAt());
         comment.setPk(commentary.getId());

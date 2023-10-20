@@ -6,7 +6,7 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.Commentary;
 
-import java.util.*;
+import java.util.List;
 
 public interface CommentaryMapping {
 

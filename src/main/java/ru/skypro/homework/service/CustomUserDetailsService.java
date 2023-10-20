@@ -12,7 +12,6 @@ import ru.skypro.homework.service.mapping.UsersMapping;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-
     private final UserRepository userRepository;
     private final UsersMapping usersMapping;
 
@@ -29,9 +28,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (userEntity == null) {
             throw new UserNotFoundException();
         }
-
         return new CustomUserDetails(userEntityDTO);
-
     }
-
 }

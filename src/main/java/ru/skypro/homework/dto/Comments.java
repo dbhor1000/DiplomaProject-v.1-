@@ -1,8 +1,6 @@
 package ru.skypro.homework.dto;
 
-import lombok.Data;
-
-import java.util.*;
+import java.util.List;
 
 public class Comments {
 

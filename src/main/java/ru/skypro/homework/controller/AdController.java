@@ -1,26 +1,18 @@
 package ru.skypro.homework.controller;
 
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.models.security.SecurityScheme;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.*;
+import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.Image;
-import ru.skypro.homework.repository.ImageRepository;
-import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AdService;
-import ru.skypro.homework.service.AuthService;
-import ru.skypro.homework.service.mapping.AdMapping;
+import ru.skypro.homework.service.ImageService;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -43,15 +35,11 @@ public class AdController {
     //7. Обновление картинки объявления - PATCH - Позже
 
     private final AdService adService;
-    private final AdMapping adMapping;
-    private final UserRepository userRepository;
-    private final ImageRepository imageRepository;
+    private final ImageService imageService;
 
-    public AdController(AdService adService, AdMapping adMapping, UserRepository userRepository, ImageRepository imageRepository) {
+    public AdController(AdService adService, ImageService imageService) {
         this.adService = adService;
-        this.adMapping = adMapping;
-        this.userRepository = userRepository;
-        this.imageRepository = imageRepository;
+        this.imageService = imageService;
     }
 
     @GetMapping
@@ -64,11 +52,10 @@ public class AdController {
 
     //***
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    //@RequestMapping(value = "", method = RequestMethod.POST, consumes = {"multipart/form-data"})
     @ResponseBody
     public ResponseEntity<?> newAd(@RequestPart("properties") @Valid CreateOrUpdateAd createOrUpdateAd, @RequestPart("image") @Valid MultipartFile picture, Authentication authentication) {
 
-        ru.skypro.homework.dto.Ad createdAdd = adService.newAd(createOrUpdateAd, picture, "registered@mail.ru");
+        ru.skypro.homework.dto.Ad createdAdd = adService.newAd(createOrUpdateAd, picture, authentication.getName());
 
         if (createdAdd != null) {
             return ResponseEntity.ok(createdAdd);
@@ -129,7 +116,6 @@ public class AdController {
     }
 
     //
-    //Работа с изображениями на следующих этапах разработки.
 
     //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -145,7 +131,7 @@ public class AdController {
         //Метод получает картинку в формате byte[] из Entity Image, хранящегося в репозитории.
         //Изображения в Ad и UserEntity хранятся в качестве ссылок на объекты в репозитории Image.
 
-        Image image = imageRepository.getReferenceById(id);
+        Image image = imageService.callImageById(id);
         return image.getImage();
     }
 

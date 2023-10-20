@@ -1,11 +1,12 @@
 package ru.skypro.homework.model;
 
-import lombok.*;
-import org.springframework.lang.Nullable;
-import ru.skypro.homework.dto.ExtendedAd;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -27,7 +28,8 @@ public class AdEntity {
     private UserEntity userRelated;
     @OneToMany(mappedBy = "adRelated",
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     List<Commentary> comments = new ArrayList<>();
 
     public int getId() {

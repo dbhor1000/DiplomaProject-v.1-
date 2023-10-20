@@ -2,10 +2,11 @@ package ru.skypro.homework.service.mapping;
 
 
 import org.springframework.stereotype.Component;
-import ru.skypro.homework.dto.*;
+import ru.skypro.homework.dto.ExtendedLoginViaDB;
+import ru.skypro.homework.dto.NewPassword;
+import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.model.UserEntity;
-
-import java.util.Arrays;
 
 @Component
 public class UsersMappingImpl implements UsersMapping {
