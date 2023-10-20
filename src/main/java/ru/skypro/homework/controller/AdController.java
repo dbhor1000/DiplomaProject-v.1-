@@ -68,7 +68,7 @@ public class AdController {
     @ResponseBody
     public ResponseEntity<?> newAd(@ModelAttribute("properties") @Valid CreateOrUpdateAd createOrUpdateAd, @RequestPart("image") @Valid MultipartFile picture, Authentication authentication) {
 
-        ru.skypro.homework.dto.Ad createdAdd = adService.newAd(createOrUpdateAd, picture, "dmitry.hrshn@skyeng.ru");
+        ru.skypro.homework.dto.Ad createdAdd = adService.newAd(createOrUpdateAd, picture, "registered@mail.ru");
 
         if (createdAdd != null) {
             return ResponseEntity.ok(createdAdd);

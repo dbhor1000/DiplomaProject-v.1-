@@ -23,7 +23,7 @@ public class AdEntity {
     @JoinColumn(name = "AD_IMAGE", nullable = true)
     private Image imageAd;
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "USER_ID", nullable = false)
+    @JoinColumn(name = "USER_ID", nullable = true)
     private UserEntity userRelated;
     @OneToMany(mappedBy = "adRelated",
             fetch = FetchType.LAZY,
