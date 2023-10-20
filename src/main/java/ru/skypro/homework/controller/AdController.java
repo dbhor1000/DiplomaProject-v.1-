@@ -66,7 +66,7 @@ public class AdController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     //@RequestMapping(value = "", method = RequestMethod.POST, consumes = {"multipart/form-data"})
     @ResponseBody
-    public ResponseEntity<?> newAd(@ModelAttribute("properties") @Valid CreateOrUpdateAd createOrUpdateAd, @RequestPart("image") @Valid MultipartFile picture, Authentication authentication) {
+    public ResponseEntity<?> newAd(@RequestPart("properties") @Valid CreateOrUpdateAd createOrUpdateAd, @RequestPart("image") @Valid MultipartFile picture, Authentication authentication) {
 
         ru.skypro.homework.dto.Ad createdAdd = adService.newAd(createOrUpdateAd, picture, "registered@mail.ru");
 

@@ -29,7 +29,7 @@ public class AdMappingImpl implements AdMapping {
         Ad assembledAdDto = new Ad();
         assembledAdDto.setAuthor(ad.getUserRelated().getId());
         assembledAdDto.setPk(ad.getId());
-        assembledAdDto.setImage("ads/" + ad.getImageAd().getId() + "/adPicture");
+        assembledAdDto.setImage("/ads/" + ad.getImageAd().getId() + "/adPicture");
         assembledAdDto.setPrice(ad.getPrice());
         assembledAdDto.setTitle(ad.getTitle());
         return assembledAdDto;
@@ -45,7 +45,7 @@ public class AdMappingImpl implements AdMapping {
         assembledExtendedAdDto.setAuthorLastName(ad.getUserRelated().getLastName());
         assembledExtendedAdDto.setDescription(ad.getDescription());
         assembledExtendedAdDto.setEmail(ad.getUserRelated().getUsername());
-        assembledExtendedAdDto.setImage("ads/" + ad.getImageAd().getId() + "/adPicture");
+        assembledExtendedAdDto.setImage("/ads/" + ad.getImageAd().getId() + "/adPicture");
         assembledExtendedAdDto.setPhone(ad.getUserRelated().getPhone());
         assembledExtendedAdDto.setPrice(ad.getPrice());
         assembledExtendedAdDto.setTitle(ad.getTitle());
