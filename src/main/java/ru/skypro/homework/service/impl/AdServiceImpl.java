@@ -86,50 +86,6 @@ public class AdServiceImpl implements AdService {
 
     }
 
-    //@Override
-    //public ru.skypro.homework.dto.Ad newAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image, String username) {
-    //
-    //    Ad mappedDTO = adMapping.createOrUpdateAdDtoToAdEntity(createOrUpdateAd);
-    //    mappedDTO.setUserRelated(userRepository.findByUsername(username));
-    //
-    //    try {
-    //
-    //        String extension = FilenameUtils.getExtension(image.getOriginalFilename());
-    //        byte[] imageToBytes = image.getBytes();
-    //        Path write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
-    //        mappedDTO.setImage(write.toString());//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
-    //
-    //    } catch (IOException e) {
-    //        throw new RuntimeException(e);
-    //    }
-    //
-    //    adRepository.save(mappedDTO);
-    //    ru.skypro.homework.dto.Ad adDTOForOutput = adMapping.adEntityToAdDto(mappedDTO);
-    //    return adDTOForOutput;
-    //
-    //}
-
-
-    //@Override
-    //public ru.skypro.homework.dto.Ad newAd(ru.skypro.homework.dto.Ad ad, MultipartFile image, String username) {
-    //
-    //    try {
-    //
-    //        Ad mappedDTO = adMapping.adDtoToAdEntity(ad);
-    //        mappedDTO.setUserRelated(userRepository.findByUsername(username));
-    //        String extension = FilenameUtils.getExtension(image.getOriginalFilename());
-    //        byte[] imageToBytes = image.getBytes();
-    //        Path write = Files.write(Paths.get(UUID.randomUUID() + "." + extension), imageToBytes);
-    //        mappedDTO.setImage(write.toString());//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
-    //        adRepository.saveAndFlush(mappedDTO);
-    //        ru.skypro.homework.dto.Ad mappedOutput = adMapping.adEntityToAdDto(mappedDTO);
-    //        return mappedOutput;
-    //
-    //    } catch (IOException e) {
-    //        throw new RuntimeException(e);
-    //    }
-    //}
-
     @Override
     public ExtendedAd requestAdFromDatabaseById(int id){
         ExtendedAd adFoundAndMapped = adMapping.adEntityToExtendedAdDto(adRepository.getReferenceById(id));
