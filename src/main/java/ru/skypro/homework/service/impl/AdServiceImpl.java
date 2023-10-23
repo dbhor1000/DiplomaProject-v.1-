@@ -145,7 +145,10 @@ public class AdServiceImpl implements AdService {
         UserEntity authorizedUser = userRepository.findByUsername(username);
         Role authorizedUserRole = authorizedUser.getRole();
 
-        if ((Optional.of(adFromRepository).isPresent() && authorizedUserRole == Role.USER && userWhoPostedAd == authorizedUser) || (Optional.of(adFromRepository).isPresent() && authorizedUserRole == Role.ADMIN)) {
+        //if ((Optional.of(adFromRepository).isPresent() && authorizedUserRole == Role.USER && userWhoPostedAd == authorizedUser) || (Optional.of(adFromRepository).isPresent() && authorizedUserRole == Role.ADMIN)) {
+        // if ((adFromRepository != null && (userWhoPostedAd.equals(authorizedUser))) || (authorizedUserRole == Role.ADMIN)) {
+        //if (adFromRepository != null && ((userWhoPostedAd.equals(authorizedUser) || authorizedUserRole == Role.ADMIN))) {
+        if ((userWhoPostedAd.equals(authorizedUser) || authorizedUserRole == Role.ADMIN)) {
             adRepository.deleteById(id);
             adRepository.flush();
             return true;
@@ -162,8 +165,9 @@ public class AdServiceImpl implements AdService {
         UserEntity authorizedUser = userRepository.findByUsername(username);
         Role authorizedUserRole = authorizedUser.getRole();
 
-        if ((Optional.of(adFoundToPatch).isPresent() && authorizedUserRole == Role.USER && userWhoPostedAd == authorizedUser) || (Optional.of(adFoundToPatch).isPresent() && authorizedUserRole == Role.ADMIN)) {
-
+        //if ((Optional.of(adFoundToPatch).isPresent() && authorizedUserRole == Role.USER && userWhoPostedAd == authorizedUser) || (Optional.of(adFoundToPatch).isPresent() && authorizedUserRole == Role.ADMIN)) {
+        //if (adFoundToPatch != null && ((userWhoPostedAd.equals(authorizedUser) || authorizedUserRole == Role.ADMIN))) {
+        if ((userWhoPostedAd.equals(authorizedUser) || authorizedUserRole == Role.ADMIN)) {
             adFoundToPatch.setTitle(createOrUpdateAd.getTitle());
             adFoundToPatch.setPrice(createOrUpdateAd.getPrice());
             adFoundToPatch.setDescription(createOrUpdateAd.getDescription());

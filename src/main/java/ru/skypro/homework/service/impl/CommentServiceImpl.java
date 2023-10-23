@@ -76,8 +76,9 @@ public class CommentServiceImpl implements CommentService {
         UserEntity authorizedUser = userRepository.findByUsername(username);
         Role authorizedUserRole = authorizedUser.getRole();
 
-        if ((Optional.of(adFound).isPresent() && Optional.of(commentFound).isPresent() && authorizedUserRole == Role.USER && userWhoCommented == authorizedUser) || (Optional.of(adFound).isPresent() && Optional.of(commentFound).isPresent() && authorizedUserRole == Role.ADMIN)) {
-
+        //if ((Optional.of(adFound).isPresent() && Optional.of(commentFound).isPresent() && authorizedUserRole == Role.USER && userWhoCommented == authorizedUser) || (Optional.of(adFound).isPresent() && Optional.of(commentFound).isPresent() && authorizedUserRole == Role.ADMIN)) {
+        //if (adFound != null && commentFound != null && ((userWhoCommented.equals(authorizedUser)) || authorizedUserRole == Role.ADMIN)) {
+        if ((userWhoCommented.equals(authorizedUser)) || authorizedUserRole == Role.ADMIN) {
             commentaryRepository.deleteById(commentFound.getId());
             commentaryRepository.flush();
             return true;
@@ -96,8 +97,9 @@ public class CommentServiceImpl implements CommentService {
         UserEntity authorizedUser = userRepository.findByUsername(username);
         Role authorizedUserRole = authorizedUser.getRole();
 
-        if ((Optional.of(adFound).isPresent() && Optional.of(commentFound).isPresent() && authorizedUserRole == Role.USER && userWhoCommented == authorizedUser) || (Optional.of(adFound).isPresent() && Optional.of(commentFound).isPresent() && authorizedUserRole == Role.ADMIN)) {
-
+        //if ((Optional.of(adFound).isPresent() && Optional.of(commentFound).isPresent() && authorizedUserRole == Role.USER && userWhoCommented == authorizedUser) || (Optional.of(adFound).isPresent() && Optional.of(commentFound).isPresent() && authorizedUserRole == Role.ADMIN)) {
+        //if (adFound != null && commentFound != null && ((userWhoCommented.equals(authorizedUser)) || authorizedUserRole == Role.ADMIN)) {
+        if ((userWhoCommented.equals(authorizedUser)) || authorizedUserRole == Role.ADMIN) {
             commentFound.setText(createOrUpdateComment.getText());
             commentaryRepository.save(commentFound);
             return true;
