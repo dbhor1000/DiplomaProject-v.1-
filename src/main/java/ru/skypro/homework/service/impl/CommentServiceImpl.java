@@ -16,6 +16,7 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.mapping.CommentaryMapping;
 
+import java.time.Instant;
 import java.util.Optional;
 
 
@@ -40,6 +41,12 @@ public class CommentServiceImpl implements CommentService {
     //3. Удаление комментария по id - DELETE
     //4. Обновление комментария по id (+id объявления) - PATCH - DTO: CreateOrUpdateComment
 
+    /**
+     * Сервисный метод для получения всех комментариев одного объявления.
+     * @param adId id объявления
+     * @return DTO-object Comments
+     */
+
     @Override
     public Comments getCommentsOfOneAd(int adId) {
         if (adRepository.getReferenceById(adId) != null) {
@@ -51,6 +58,12 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
+    /**
+     * Сервисный метод для добавления комментария к объявлению.
+     * @param commentToAdd DTO-object CreateOrUpdateComment с параметрами объявления, id объявления
+     * @return DTO-object Comment
+     */
+
     @Override
     public Comment addCommentToAd(CreateOrUpdateComment commentToAdd, int adId) {
 
@@ -60,12 +73,20 @@ public class CommentServiceImpl implements CommentService {
             Commentary mappedInputDTO = commentaryMapping.createOrUpdateCommentDtoToCommentaryEntity(commentToAdd);
             mappedInputDTO.setUserRelated(adToAddCommentTo.getUserRelated());
             mappedInputDTO.setAdRelated(adToAddCommentTo);
+            mappedInputDTO.setCreatedAt(Instant.now().toEpochMilli());
             commentaryRepository.save(mappedInputDTO);
             return commentaryMapping.commentEntityToCommentDto(mappedInputDTO);
         } else {
             throw new AdNotFoundException();
         }
     }
+
+    /**
+     * Сервисный метод для удаления комментария.
+     * @param adId id объявления, commentId id комментария и username авторизованного пользователя
+     * @return boolean true/false
+     */
+
 
     @Override
     public boolean deleteCommentByIdAndAdId(int adId, Integer commentId, String username) {
@@ -87,6 +108,13 @@ public class CommentServiceImpl implements CommentService {
                 throw new CommentNotFoundException();
         }
     }
+
+    /**
+     * Сервисный метод для редактирования комментария.
+     * @param adId id объявления, commentId id комментария, DTO-object CreateOrUpdateComment и username авторизованного пользователя
+     * @return boolean true/false
+     */
+
 
     @Override
     public boolean patchCommentByIdAndAdId(int adId, Integer commentId, CreateOrUpdateComment createOrUpdateComment, String username) {

@@ -28,6 +28,12 @@ public class AuthServiceImpl implements AuthService {
         this.usersMapping = usersMapping;
     }
 
+    /**
+     * Сервисный метод для входа в систему по login и password.
+     * @param userName имя пользователя, password пароль пользователя
+     * @return boolean true/false
+     */
+
     @Override
     public boolean login(String userName, String password) {
         //if (!manager.userExists(userName)) {
@@ -40,6 +46,12 @@ public class AuthServiceImpl implements AuthService {
             //return (password.equals(userDetails.getPassword()));
         }
     }
+
+    /**
+     * Сервисный метод для регистрации нового пользователя в системе.
+     * @param register DTO-object с данными новго пользователя
+     * @return boolean true/false
+     */
 
     @Override
     public boolean register(Register register){

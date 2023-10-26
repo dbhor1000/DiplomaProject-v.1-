@@ -36,8 +36,12 @@ public class UsersController {
         this.usersService = usersService;
         this.imageService = imageService;
     }
-    //
-    //Метод работает.
+
+    /**
+     * Контроллер для смены пароля авторизованного пользователя.
+     * @param authentication, DTO объект со старым и новым паролем
+     * @return сообщение об успехе или ошибке
+     */
 
     @PostMapping("/set_password")
     public ResponseEntity<?> changePassword(@RequestBody NewPassword newPassword, Authentication authentication) {
@@ -49,8 +53,11 @@ public class UsersController {
         }
     }
 
-    //
-    //Метод работает.
+    /**
+     * Контроллер для поулчения данных авторизованного пользователя.
+     * @param authentication
+     * @return DTO объект User с данными пользователя
+     */
 
     @GetMapping("/me")
     public ResponseEntity<?> getAuthorizedUserInfo(Authentication authentication) {
@@ -60,8 +67,11 @@ public class UsersController {
 
     }
 
-    //
-    //Метод работает.
+    /**
+     * Контроллер для редактирования данных авторизованного пользователя.
+     * @param authentication, DTO объект с новыми данными пользователя
+     * @return DTO объект с новыми данными пользователя
+     */
     @PatchMapping("/me")
     public ResponseEntity<?> patchAuthorizedUser(@RequestBody UpdateUser updateUser, Authentication authentication) {
 
@@ -69,7 +79,11 @@ public class UsersController {
         return ResponseEntity.ok(updatedUser);
     }
 
-    //
+    /**
+     * Контроллер для редактирования изображения авторизорванного пользователя.
+     * @param authentication, id объявления, MultipartFile новго изображения
+     * @return сообщение об успехе
+     */
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> editAuthorizedUserProfilePic(@RequestParam("image") MultipartFile linkedPicture, Authentication authentication) {
@@ -77,6 +91,12 @@ public class UsersController {
         usersService.patchAuthorizedUserPicture(linkedPicture, authentication.getName());
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * Контроллер для получения изображения из базы данных. Служебный контроллер, необходимый для правильного функционирования front-end части.
+     * @param id запрашиваемого из базы изображения
+     * @return изображение в формате byte[]
+     */
 
     @Transactional
     @GetMapping(value = "/{id}/avatar", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})

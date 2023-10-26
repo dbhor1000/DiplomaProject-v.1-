@@ -43,12 +43,22 @@ public class AdServiceImpl implements AdService {
         this.imageRepository = imageRepository;
     }
 
+    /**
+     * Сервисный метод для получения всех объявлений из репозитория (список) и конвертации в список DTO-объектов.
+     * @return список DTO-objects List<Ad>
+     */
+
     @Override
     public List<Ad> getAllAdsFromDatabase() {
         List<AdEntity> allAdsFromDatabaseCollect = adRepository.findAll();
         List<Ad> allAdsInDTO = adMapping.AdEntityListToAdsDto(allAdsFromDatabaseCollect);
         return allAdsInDTO;
     }
+
+    /**
+     * Сервисный метод для получения DTO-object Ads из списка List<Ad> и количества объектов в этом списке.
+     * @return DTO-object Ads
+     */
 
     @Override
     public Ads allAdsPassToController() {
@@ -58,6 +68,12 @@ public class AdServiceImpl implements AdService {
         ads.setCount(getAllAdsFromDatabase().size());
         return ads;
     }
+
+    /**
+     * Сервисный метод для добавления объявления.
+     * @param createOrUpdateAd DTO-object с параметрами объявления, MultiPart файл с изображением и username авторизованного пользователя
+     * @return DTO-object Ad
+     */
 
     @Transactional
     @Override
@@ -86,11 +102,23 @@ public class AdServiceImpl implements AdService {
 
     }
 
+    /**
+     * Сервисный метод для запроса объявления из БД по id.
+     * @param id объвления
+     * @return DTO-object ExtendedAd
+     */
+
     @Override
     public ExtendedAd requestAdFromDatabaseById(int id){
         ExtendedAd adFoundAndMapped = adMapping.adEntityToExtendedAdDto(adRepository.getReferenceById(id));
         return adFoundAndMapped;
     }
+
+    /**
+     * Сервисный метод для удаления объявления по id.
+     * @param id объявления и username авторизованного пользователя
+     * @return boolean true/false
+     */
 
     @Transactional
     @Override
@@ -113,6 +141,12 @@ public class AdServiceImpl implements AdService {
         }
     }
 
+    /**
+     * Сервисный метод для редактирования объявления по id.
+     * @param createOrUpdateAd DTO-object с новыми параметрами объявления, id объявления и username авторизованного пользователя
+     * @return Entity-object AdEntity
+     */
+
     @Override
     public AdEntity editAdPatch(CreateOrUpdateAd createOrUpdateAd, int id, String username) {
 
@@ -134,6 +168,12 @@ public class AdServiceImpl implements AdService {
         }
     }
 
+    /**
+     * Сервисный метод для получения объявлений авторизованного пользователя.
+     * @param username авторизованного пользователя
+     * @return DTO-object Ads
+     */
+
     @Override
     public Ads authorizedUserAds(String username) {
 
@@ -141,6 +181,12 @@ public class AdServiceImpl implements AdService {
         Ads authorizedUserAds = adMapping.userAdsToAdsDTO(authorizedUser);
         return authorizedUserAds;
     }
+
+    /**
+     * Сервисный метод для редактирования изображения объявления по id.
+     * @param image MultiPart файл с изображением, id редактируемого объявления, username авторизованного пользователя
+     * @return boolean true/false
+     */
 
     @Override
     public boolean patchAdPictureById(MultipartFile image, int adId, String username) {
@@ -171,6 +217,12 @@ public class AdServiceImpl implements AdService {
 
         return false;
     }
+
+    /**
+     * Сервисный метод для выхова объявления по id.
+     * @param id вызываемого объявления
+     * @return Entity-object AdEntity
+     */
 
     @Override
     public AdEntity callAdById (int id) {

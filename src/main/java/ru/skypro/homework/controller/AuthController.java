@@ -24,6 +24,12 @@ public class AuthController {
         this.authService = authService;
     }
 
+    /**
+     * Контроллер для входа в учётную запись с помощью логина и пароля.
+     * @param login
+     * @return сообщение об успехе или неудачном входе в учётную запись.
+     */
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
@@ -32,6 +38,12 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
+    /**
+     * Контроллер для регистрации нового пользователя в системе.
+     * @param register DTO объект с данными нового пользователя
+     * @return сообщение об успешной регистрации или же ошибке при регистрации.
+     */
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Register register) {

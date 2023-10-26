@@ -33,7 +33,11 @@ public class CommentController {
         this.adService = adService;
     }
 
-    //Метод работает.
+    /**
+     * Контроллер для получения комментариев, относящихся к определённому объявлению, по id объявления.
+     * @param id объявления
+     * @return DTO объект Comments, представляющий собой список комментариев.
+     */
 
     @GetMapping("/{id}/comments")
     public ResponseEntity<Comments> getAdComments(@PathVariable int id) {
@@ -46,8 +50,11 @@ public class CommentController {
         }
     }
 
-    //
-    //Метод работает.
+    /**
+     * Контроллер для добавления комментария к объявлению.
+     * @param id объявления, DTO объект CreateOrUpdateComment с данными комментария.
+     * @return добавленный комментарий или сообщение об ошибке.
+     */
 
     @PostMapping("/{id}/comments")
     public ResponseEntity<?> addCommentToAd(@PathVariable Integer id, @RequestBody CreateOrUpdateComment createOrUpdateComment) {
@@ -59,10 +66,12 @@ public class CommentController {
         }
     }
 
-    //
-    //Метод работает.
+    /**
+     * Контроллер для удаления комментария по id.
+     * @param authentication, id объялвения, id объявления, к которому относится комментарий
+     * @return сообщение об успехе или ошибке
+     */
 
-    //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @Transactional
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> deleteCommentById(@PathVariable Integer adId, @PathVariable Integer commentId, Authentication authentication) {
@@ -76,10 +85,11 @@ public class CommentController {
 
     }
 
-    //
-    //Метод аботает.
-
-    //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    /**
+     * Контроллер для редактирования комментария по id.
+     * @param authentication, id объявления, id комментария, DTO объект с новыми данными объявления
+     * @return сообщение об успехе или ошибке
+     */
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<?> patchCommentById(@PathVariable("adId") Integer adId, @PathVariable("commentId") Integer commentId, @RequestBody CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
         if (commentService.patchCommentByIdAndAdId(adId, commentId, createOrUpdateComment, authentication.getName())) {

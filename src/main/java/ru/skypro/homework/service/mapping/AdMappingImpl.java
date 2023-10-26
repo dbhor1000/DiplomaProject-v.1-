@@ -24,7 +24,6 @@ public class AdMappingImpl implements AdMapping {
         this.imageRepository = imageRepository;
     }
 
-    //Этот маппер не нужен(/сломался/требует внимания/выглядит грустным/(был) слишком хорош :P)?
     @Override
     public Ad adEntityToAdDto(AdEntity ad) {
         if (ad == null) {

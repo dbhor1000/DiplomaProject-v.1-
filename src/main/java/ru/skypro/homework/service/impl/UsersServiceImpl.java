@@ -59,6 +59,12 @@ public class UsersServiceImpl implements UsersService {
         this.imageRepository = imageRepository;
     }
 
+    /**
+     * Сервисный метод для смены пароля авторизованного пользователя.
+     * @param newPassword DTO-object NewPassword и username авторизованного пользователя
+     * @return boolean true/false
+     */
+
 
     @Override
     public boolean changePassword(NewPassword newPassword, String username) {
@@ -73,6 +79,13 @@ public class UsersServiceImpl implements UsersService {
         }
     }
 
+    /**
+     * Сервисный метод для получения данных авторизованного пользователя.
+     * @param username авторизованного пользователя
+     * @return DTO-object User
+     */
+
+
     @Override
     public User retrieveAuthorizedUserInformation(String username) {
             UserEntity authorizedUser = userRepository.findByUsername(username);
@@ -80,6 +93,13 @@ public class UsersServiceImpl implements UsersService {
             return authorizedUserMapped;
 
     }
+
+    /**
+     * Сервисный метод для редактирования данных авторизованного пользователя.
+     * @param updateUser DTO-object UpdateUser, username авторизованного пользователя
+     * @return DTO-object UpdateUser
+     */
+
 
     @Override
     public UpdateUser patchAuthorizedUserInformation(UpdateUser updateUser, String username) {
@@ -90,6 +110,13 @@ public class UsersServiceImpl implements UsersService {
             userRepository.save(authorizedUser);
             return updateUser;
     }
+
+    /**
+     * Сервисный метод для редактирования изображения авторизованного пользователя.
+     * @param image MultipartFile изображения, username авторизованного пользователя
+     * @return boolean true/false
+     */
+
 
     @Transactional
     @Override

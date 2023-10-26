@@ -42,6 +42,12 @@ public class AdController {
         this.imageService = imageService;
     }
 
+    /**
+     * Контроллер для получения всех объявлений.
+     * @param authentication
+     * @return все объявления как DTO объект Ads
+     */
+
     @GetMapping
     public ResponseEntity<Ads> adInfo(Authentication authentication) {
 
@@ -50,7 +56,11 @@ public class AdController {
         return ResponseEntity.ok(ads);
     }
 
-    //***
+    /**
+     * Контроллер для добавления новых объявлений от лица авторизованного пользователя.
+     * @param authentication, данные объявления в DTO объекте, MultipartFile с изображением
+     * @return добавленное объявление DTO объект Ad
+     */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
     public ResponseEntity<?> newAd(@RequestPart("properties") @Valid CreateOrUpdateAd createOrUpdateAd, @RequestPart("image") @Valid MultipartFile picture, Authentication authentication) {
@@ -65,9 +75,11 @@ public class AdController {
     }
 
 
-    //
-    //Метод работает.
-    //@PreAuthorize("hasRole('ROLE_USER')")
+    /**
+     * Контроллер для получения информации об объявлении по id
+     * @param id
+     * @return найденное объявление как DTO объект ExtendedAd
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAd> adInfoById(@PathVariable Integer id) {
 
@@ -75,9 +87,11 @@ public class AdController {
         return ResponseEntity.ok(adById);
     }
 
-    //
-    //Метод работает.
-    //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    /**
+     * Контроллер для удаления объявления по id.
+     * @param authentication, id
+     * @return сообщение об успешном выполнении метода или ошибке
+     */
     @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAdById(@PathVariable int id, Authentication authentication) {
@@ -89,10 +103,12 @@ public class AdController {
     }
 
 
-    //
-    //Метод работает
+    /**
+     * Контроллер для внесения изменений в объявление по id.
+     * @param authentication
+     * @return все объявления как DTO объект Ads
+     */
 
-    //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PatchMapping("/{id}")
     public ResponseEntity<?> patchAdById(@PathVariable Integer id, @RequestBody CreateOrUpdateAd createOrUpdateAd, Authentication authentication) {
         AdEntity ad = adService.editAdPatch(createOrUpdateAd, id, authentication.getName());
@@ -103,9 +119,11 @@ public class AdController {
         }
     }
 
-    //
-    //Метод работает.
-
+    /**
+     * Контроллер для получения объявлений авторизованного пользователя.
+     * @param authentication
+     * @return все объявления как DTO объект Ads
+     */
 
     @GetMapping("/me")
     public ResponseEntity<?> showAuthorizedUserAd(Authentication authentication) {
@@ -115,7 +133,11 @@ public class AdController {
         return ResponseEntity.ok(retrievedAds);
     }
 
-    //
+    /**
+     * Контроллер для cмены изображения объявления, найденного по id.
+     * @param authentication, id объявления, linkedPicture новое изображение
+     * @return сообщение о выполнении метода
+     */
 
     //@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -123,6 +145,12 @@ public class AdController {
         adService.patchAdPictureById(linkedPicture, id, authentication.getName());
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * Контроллер для получения изображения из базы данных. Служебный контроллер, необходимый для правильного функционирования front-end части.
+     * @param id запрашиваемого из базы изображения
+     * @return изображение в формате byte[]
+     */
 
     @Transactional
     @GetMapping(value = "/{id}/adPicture", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE, "image/*"})

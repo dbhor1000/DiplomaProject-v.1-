@@ -12,6 +12,13 @@ public class ImageServiceImpl implements ImageService {
     public ImageServiceImpl(ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
     }
+
+    /**
+     * Сервисный метод для вызова изображения из БД изображений по id.
+     * @param id вызываемого изображения
+     * @return DTO-object Image
+     */
+
     @Override
     public Image callImageById (int id) {
         Image image = imageRepository.getReferenceById(id);
