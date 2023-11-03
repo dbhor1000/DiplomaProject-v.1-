@@ -12,7 +12,7 @@ import java.util.List;
 @EqualsAndHashCode
 @AllArgsConstructor
 @Entity
-public class AdEntity {
+public class  AdEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
