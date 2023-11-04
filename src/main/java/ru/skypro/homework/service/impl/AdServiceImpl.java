@@ -208,7 +208,7 @@ public class AdServiceImpl implements AdService {
             throw new RuntimeException(e);
         }
 
-        if ((Optional.of(adToModify).isPresent() && authorizedUserRole.equals(Role.USER) && userWhoPostedAd == authorizedUser) || (Optional.of(adToModify).isPresent() && authorizedUserRole.equals(Role.ADMIN))) {
+        if ((Optional.of(adToModify).isPresent() && authorizedUserRole ==Role.USER && userWhoPostedAd.equals(authorizedUser)) || (Optional.of(adToModify).isPresent() && authorizedUserRole == Role.ADMIN)) {
 
                 adToModify.setImageAd(multipartToImage);//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
                 adRepository.save(adToModify);
