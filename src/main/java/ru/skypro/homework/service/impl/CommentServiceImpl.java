@@ -5,8 +5,6 @@ import ru.skypro.homework.dto.Comment;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.dto.Role;
-import ru.skypro.homework.exception.AdNotFoundException;
-import ru.skypro.homework.exception.CommentNotFoundException;
 import ru.skypro.homework.exception.NoAccessToAdException;
 import ru.skypro.homework.exception.NoAccessToCommentException;
 import ru.skypro.homework.model.AdEntity;
