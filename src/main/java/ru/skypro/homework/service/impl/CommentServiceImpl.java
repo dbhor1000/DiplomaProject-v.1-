@@ -7,6 +7,8 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.exception.CommentNotFoundException;
+import ru.skypro.homework.exception.NoAccessToAdException;
+import ru.skypro.homework.exception.NoAccessToCommentException;
 import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.Commentary;
 import ru.skypro.homework.model.UserEntity;
@@ -54,7 +56,7 @@ public class CommentServiceImpl implements CommentService {
             Comments retrievedComments = commentaryMapping.adCommentsToCommentsDTO(adToRetrieveCommentsFrom);
             return retrievedComments;
         } else {
-            throw new AdNotFoundException();
+            throw new NoAccessToAdException();
         }
     }
 
@@ -77,7 +79,7 @@ public class CommentServiceImpl implements CommentService {
             commentaryRepository.save(mappedInputDTO);
             return commentaryMapping.commentEntityToCommentDto(mappedInputDTO);
         } else {
-            throw new AdNotFoundException();
+            throw new NoAccessToAdException();
         }
     }
 
@@ -105,7 +107,7 @@ public class CommentServiceImpl implements CommentService {
             return true;
             } else {
 
-                throw new CommentNotFoundException();
+                throw new NoAccessToCommentException();
         }
     }
 
@@ -132,7 +134,7 @@ public class CommentServiceImpl implements CommentService {
             commentaryRepository.save(commentFound);
             return true;
         } else {
-            throw new CommentNotFoundException();
+            throw new NoAccessToCommentException();
         }
     }
 

@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface AdMapping {
 
-    public List<Ad> AdEntityListToAdsDto(List<AdEntity> inputAdList);
+    public List<Ad> adEntityListToAdsDto(List<AdEntity> inputAdList);
 
     //Этот маппер не нужен(/сломался/требует внимания/выглядит грустным/(был) слишком хорош :P)?
     Ad adEntityToAdDto(AdEntity ad);

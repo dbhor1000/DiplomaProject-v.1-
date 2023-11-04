@@ -21,7 +21,7 @@ public class CommentaryMappingImpl implements CommentaryMapping {
         Comment comment = new Comment();
         comment.setAuthor(commentary.getUserRelated().getId());
         if(commentary.getUserRelated().getImageAvatar() != null) {
-            comment.setAuthorImage("/users/" + commentary.getUserRelated().getImageAvatar().getId() + "/avatar/");
+            comment.setAuthorImage("/users/" + commentary.getUserRelated().getImageAvatar().getId() + "/avatar");
         } else {
             comment.setAuthorImage(null);
         }

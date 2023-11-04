@@ -77,7 +77,7 @@ public class AdMappingImpl implements AdMapping {
     }
 
     @Override
-    public List<Ad> AdEntityListToAdsDto(List<AdEntity> inputAdList) {
+    public List<Ad> adEntityListToAdsDto(List<AdEntity> inputAdList) {
         if (inputAdList == null) {
             return null;
         }
@@ -94,7 +94,7 @@ public class AdMappingImpl implements AdMapping {
             return null;
         }
         Ads ads = new Ads();
-        ads.setResults(AdEntityListToAdsDto(userEntity.getAds()));
+        ads.setResults(adEntityListToAdsDto(userEntity.getAds()));
         ads.setCount(userEntity.getAds().size());
         return ads;
     }

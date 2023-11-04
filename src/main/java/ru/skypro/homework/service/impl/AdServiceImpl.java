@@ -3,7 +3,7 @@ package ru.skypro.homework.service.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.exception.AdNotFoundException;
+import ru.skypro.homework.exception.NoAccessToAdException;
 import ru.skypro.homework.model.AdEntity;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.UserEntity;
@@ -51,7 +51,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public List<Ad> getAllAdsFromDatabase() {
         List<AdEntity> allAdsFromDatabaseCollect = adRepository.findAll();
-        List<Ad> allAdsInDTO = adMapping.AdEntityListToAdsDto(allAdsFromDatabaseCollect);
+        List<Ad> allAdsInDTO = adMapping.adEntityListToAdsDto(allAdsFromDatabaseCollect);
         return allAdsInDTO;
     }
 
@@ -137,7 +137,7 @@ public class AdServiceImpl implements AdService {
             adRepository.flush();
             return true;
         } else {
-            throw new AdNotFoundException();
+            throw new NoAccessToAdException();
         }
     }
 
@@ -164,7 +164,7 @@ public class AdServiceImpl implements AdService {
             adRepository.save(adFoundToPatch);
             return adFoundToPatch;
         } else {
-            throw new AdNotFoundException();
+            throw new NoAccessToAdException();
         }
     }
 
@@ -208,7 +208,7 @@ public class AdServiceImpl implements AdService {
             throw new RuntimeException(e);
         }
 
-        if ((Optional.of(adToModify).isPresent() && authorizedUserRole == Role.USER && userWhoPostedAd == authorizedUser) || (Optional.of(adToModify).isPresent() && authorizedUserRole == Role.ADMIN)) {
+        if ((Optional.of(adToModify).isPresent() && authorizedUserRole.equals(Role.USER) && userWhoPostedAd == authorizedUser) || (Optional.of(adToModify).isPresent() && authorizedUserRole.equals(Role.ADMIN))) {
 
                 adToModify.setImageAd(multipartToImage);//Сохраняем изображение как строку, получившуюся из массива байтов при конвертации. Далее, можно конвертировать обратно.
                 adRepository.save(adToModify);

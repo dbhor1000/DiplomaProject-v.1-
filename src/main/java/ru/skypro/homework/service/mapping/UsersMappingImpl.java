@@ -41,7 +41,7 @@ public class UsersMappingImpl implements UsersMapping {
         user.setPhone(userEntityInput.getPhone());
         user.setRole(userEntityInput.getRole());
         if(userEntityInput.getImageAvatar() != null) {
-            user.setImage("/users/" + String.valueOf(userEntityInput.getImageAvatar().getId()) + "/avatar/");
+            user.setImage("/users/" + String.valueOf(userEntityInput.getImageAvatar().getId()) + "/avatar");
         } else {
             user.setImage(null);
         }
