@@ -1,6 +1,5 @@
 package ru.skypro.homework.controller;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +11,24 @@ import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 
+
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
-@RequiredArgsConstructor
+
 public class AuthController {
 
     private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
+    /**
+     * Контроллер для входа в учётную запись с помощью логина и пароля.
+     * @param login
+     * @return сообщение об успехе или неудачном входе в учётную запись.
+     */
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Login login) {
@@ -28,6 +38,12 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
+    /**
+     * Контроллер для регистрации нового пользователя в системе.
+     * @param register DTO объект с данными нового пользователя
+     * @return сообщение об успешной регистрации или же ошибке при регистрации.
+     */
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Register register) {
